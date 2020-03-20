@@ -120,12 +120,21 @@ namespace FileCabinetApp
             Console.Write("last name: ");
             string lastName = Console.ReadLine();
 
+            Console.Write("sex: ");
+            char sex = char.Parse(Console.ReadLine());
+
+            Console.Write("weight: ");
+            short weight = short.Parse(Console.ReadLine());
+
             Console.Write("date: ");
             string dateString = Console.ReadLine();
             string[] date = dateString.Split(',', '.', '/');
             DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
 
-            Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth)} is created.");
+            Console.Write("balance: ");
+            decimal balance = decimal.Parse(Console.ReadLine());
+
+            Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
         }
 
         private static void List(string parameters)
