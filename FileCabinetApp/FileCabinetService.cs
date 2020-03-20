@@ -25,7 +25,6 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] GetRecords()
         {
-            // TODO: добавьте реализацию метода
             return this.list.ToArray();
         }
 
