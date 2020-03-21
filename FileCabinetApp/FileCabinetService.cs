@@ -80,6 +80,26 @@ namespace FileCabinetApp
             return newRecord.Id;
         }
 
+        public void EditRecord(int id, string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
+        {
+            for (int i = 0; i < this.list.Count; i++)
+            {
+                if (this.list[i].Id == id)
+                {
+                    this.list[i].FirstName = firstName;
+                    this.list[i].LastName = lastName;
+                    this.list[i].Sex = sex;
+                    this.list[i].Weight = weight;
+                    this.list[i].DateOfBirth = dateOfBirth;
+                    this.list[i].Balance = balance;
+
+                    return;
+                }
+            }
+
+            throw new ArgumentException($"A user with id {id} doesn't exist.");
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();
