@@ -114,27 +114,43 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            Console.Write("first name: ");
-            string firstName = Console.ReadLine();
+            bool nextIteration = true;
 
-            Console.Write("last name: ");
-            string lastName = Console.ReadLine();
+            do
+            {
+                try
+                {
+                    Console.Write("first name: ");
+                    string firstName = Console.ReadLine();
 
-            Console.Write("sex: ");
-            char sex = char.Parse(Console.ReadLine());
+                    Console.Write("last name: ");
+                    string lastName = Console.ReadLine();
 
-            Console.Write("weight: ");
-            short weight = short.Parse(Console.ReadLine());
+                    Console.Write("sex: ");
+                    char sex = char.Parse(Console.ReadLine());
 
-            Console.Write("date: ");
-            string dateString = Console.ReadLine();
-            string[] date = dateString.Split(',', '.', '/');
-            DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                    Console.Write("weight: ");
+                    short weight = short.Parse(Console.ReadLine());
 
-            Console.Write("balance: ");
-            decimal balance = decimal.Parse(Console.ReadLine());
+                    Console.Write("date: ");
+                    string dateString = Console.ReadLine();
+                    string[] date = dateString.Split(',', '.', '/');
+                    DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
 
-            Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
+                    Console.Write("balance: ");
+                    decimal balance = decimal.Parse(Console.ReadLine());
+
+                    Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
+
+                    nextIteration = false;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("try it again");
+                }
+            }
+            while (nextIteration);
         }
 
         private static void List(string parameters)
