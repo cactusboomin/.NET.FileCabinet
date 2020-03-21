@@ -21,6 +21,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("edit", Edit),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -30,6 +31,7 @@ namespace FileCabinetApp
             new string[] { "stat", "prints the statistics", "The 'stat' command prints the statistics." },
             new string[] { "create", "creates a new record", "The 'create' command creates a new record." },
             new string[] { "list", "prints all records", "The 'list' command prints all records." },
+            new string[] { "edit", "changes the record", "The 'edit' command changes the record." },
         };
 
         public static void Main(string[] args)
@@ -114,27 +116,83 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            Console.Write("first name: ");
-            string firstName = Console.ReadLine();
+            bool nextIteration = true;
 
-            Console.Write("last name: ");
-            string lastName = Console.ReadLine();
+            do
+            {
+                try
+                {
+                    Console.Write("first name: ");
+                    string firstName = Console.ReadLine();
 
-            Console.Write("sex: ");
-            char sex = char.Parse(Console.ReadLine());
+                    Console.Write("last name: ");
+                    string lastName = Console.ReadLine();
 
-            Console.Write("weight: ");
-            short weight = short.Parse(Console.ReadLine());
+                    Console.Write("sex: ");
+                    char sex = char.Parse(Console.ReadLine());
 
-            Console.Write("date: ");
-            string dateString = Console.ReadLine();
-            string[] date = dateString.Split(',', '.', '/');
-            DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                    Console.Write("weight: ");
+                    short weight = short.Parse(Console.ReadLine());
 
-            Console.Write("balance: ");
-            decimal balance = decimal.Parse(Console.ReadLine());
+                    Console.Write("date: ");
+                    string dateString = Console.ReadLine();
+                    string[] date = dateString.Split(',', '.', '/');
+                    DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
 
-            Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
+                    Console.Write("balance: ");
+                    decimal balance = decimal.Parse(Console.ReadLine());
+
+                    Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
+
+                    nextIteration = false;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("try it again");
+                }
+            }
+            while (nextIteration);
+        }
+
+        private static void Edit(string parameters)
+        {
+            int id;
+
+            try
+            {
+                if (!int.TryParse(parameters, out id))
+                {
+                    Console.WriteLine("invalid id");
+                    return;
+                }
+
+                Console.Write("first name: ");
+                string firstName = Console.ReadLine();
+
+                Console.Write("last name: ");
+                string lastName = Console.ReadLine();
+
+                Console.Write("sex: ");
+                char sex = char.Parse(Console.ReadLine());
+
+                Console.Write("weight: ");
+                short weight = short.Parse(Console.ReadLine());
+
+                Console.Write("date: ");
+                string dateString = Console.ReadLine();
+                string[] date = dateString.Split(',', '.', '/');
+                DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+
+                Console.Write("balance: ");
+                decimal balance = decimal.Parse(Console.ReadLine());
+
+                fileCabinetService.EditRecord(id, firstName, lastName, sex, weight, dateOfBirth, balance);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private static void List(string parameters)
