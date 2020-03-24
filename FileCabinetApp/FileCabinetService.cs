@@ -112,8 +112,6 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(firstName)} can't be null.");
             }
 
-            firstName = firstName.Trim();
-
             if (firstName.Length == 0)
             {
                 throw new ArgumentException($"{nameof(firstName)} can't be empty.");
@@ -139,8 +137,6 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(lastName)} can't be null.");
             }
 
-            lastName = lastName.Trim();
-
             if (lastName.Length == 0)
             {
                 throw new ArgumentException($"{nameof(lastName)} can't be empty.");
@@ -159,6 +155,20 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
+        public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
+        {
+            var result = new List<FileCabinetRecord>();
+
+            foreach (var r in this.records)
+            {
+                if (r.DateOfBirth.Equals(dateOfBirth))
+                {
+                    result.Add(r);
+                }
+            }
+
+            return result.ToArray();
+        }
 
         public int GetStat()
         {

@@ -138,8 +138,7 @@ namespace FileCabinetApp
 
                     Console.Write("date: ");
                     string dateString = Console.ReadLine();
-                    string[] date = dateString.Split(',', '.', '/');
-                    DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                    DateTime dateOfBirth = DateConvert(dateString);
 
                     Console.Write("balance: ");
                     decimal balance = decimal.Parse(Console.ReadLine());
@@ -183,8 +182,7 @@ namespace FileCabinetApp
 
                 Console.Write("date: ");
                 string dateString = Console.ReadLine();
-                string[] date = dateString.Split(',', '.', '/');
-                DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                DateTime dateOfBirth = DateConvert(dateString);
 
                 Console.Write("balance: ");
                 decimal balance = decimal.Parse(Console.ReadLine());
@@ -211,6 +209,8 @@ namespace FileCabinetApp
                     throw new ArgumentOutOfRangeException($"{nameof(options)} can't contain not 2 parameters.");
                 }
 
+                options[secondOption] = options[secondOption].Trim('"', '\'', ' ');
+
                 if (options[firstOption].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
                 {
                     result = fileCabinetService.FindByFirstName(options[secondOption]);
@@ -218,6 +218,10 @@ namespace FileCabinetApp
                 else if (options[firstOption].Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
                 {
                     result = fileCabinetService.FindByLastName(options[secondOption]);
+                }
+                else if (options[firstOption].Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = fileCabinetService.FindByDateOfBirth(DateConvert(options[secondOption]));
                 }
 
                 if (result.Length == 0)
@@ -246,6 +250,14 @@ namespace FileCabinetApp
             {
                 Console.WriteLine(r);
             }
+        }
+
+        private static DateTime DateConvert(string dateString)
+        {
+            string[] date = dateString.Split(',', '.', '/');
+            DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+
+            return dateOfBirth;
         }
     }
 }
