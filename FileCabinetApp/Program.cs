@@ -209,7 +209,7 @@ namespace FileCabinetApp
                     throw new ArgumentOutOfRangeException($"{nameof(options)} can't contain not 2 parameters.");
                 }
 
-                options[secondOption] = options[secondOption].Trim('"', '\'', ' ');
+                options[secondOption] = options[secondOption].Trim('"', '\'').Trim();
 
                 if (options[firstOption].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
                 {

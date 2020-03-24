@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp
@@ -7,6 +8,8 @@ namespace FileCabinetApp
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
         {
@@ -77,6 +80,13 @@ namespace FileCabinetApp
 
             this.records.Add(newRecord);
 
+            if (!this.firstNameDictionary.ContainsKey(firstName.ToLower(CultureInfo.CurrentCulture)))
+            {
+                this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+            }
+
+            this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)].Add(newRecord);
+
             return newRecord.Id;
         }
 
@@ -86,12 +96,21 @@ namespace FileCabinetApp
             {
                 if (this.records[i].Id == id)
                 {
+                    this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
+
                     this.records[i].FirstName = firstName;
                     this.records[i].LastName = lastName;
                     this.records[i].Sex = sex;
                     this.records[i].Weight = weight;
                     this.records[i].DateOfBirth = dateOfBirth;
                     this.records[i].Balance = balance;
+
+                    if (!this.firstNameDictionary.ContainsKey(this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)))
+                    {
+                        this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+                    }
+
+                    this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
 
                     return;
                 }
@@ -117,17 +136,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"{nameof(firstName)} can't be empty.");
             }
 
-            var result = new List<FileCabinetRecord>();
-
-            foreach (var r in this.records)
-            {
-                if (r.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    result.Add(r);
-                }
-            }
-
-            return result.ToArray();
+            return this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)].ToArray();
         }
 
         public FileCabinetRecord[] FindByLastName(string lastName)
