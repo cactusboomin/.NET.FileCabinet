@@ -11,6 +11,7 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
         {
@@ -91,8 +92,14 @@ namespace FileCabinetApp
                 this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
             }
 
+            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                this.dateOfBirthDictionary[dateOfBirth] = new List<FileCabinetRecord>();
+            }
+
             this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)].Add(newRecord);
             this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)].Add(newRecord);
+            this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
 
             return newRecord.Id;
         }
@@ -105,6 +112,7 @@ namespace FileCabinetApp
                 {
                     this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
                     this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
+                    this.dateOfBirthDictionary[this.records[i].DateOfBirth].Remove(this.records[i]);
 
                     this.records[i].FirstName = firstName;
                     this.records[i].LastName = lastName;
@@ -123,8 +131,14 @@ namespace FileCabinetApp
                         this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
                     }
 
+                    if (!this.dateOfBirthDictionary.ContainsKey(this.records[i].DateOfBirth))
+                    {
+                        this.dateOfBirthDictionary[this.records[i].DateOfBirth] = new List<FileCabinetRecord>();
+                    }
+
                     this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
                     this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
+                    this.dateOfBirthDictionary[this.records[i].DateOfBirth].Add(this.records[i]);
 
                     return;
                 }
@@ -150,6 +164,11 @@ namespace FileCabinetApp
                 throw new ArgumentException($"{nameof(firstName)} can't be empty.");
             }
 
+            if (!this.firstNameDictionary.ContainsKey(firstName.ToLower(CultureInfo.CurrentCulture)))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
             return this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)].ToArray();
         }
 
@@ -165,32 +184,22 @@ namespace FileCabinetApp
                 throw new ArgumentException($"{nameof(lastName)} can't be empty.");
             }
 
-            var result = new List<FileCabinetRecord>();
-
-            foreach (var r in this.records)
+            if (!this.lastNameDictionary.ContainsKey(lastName.ToLower(CultureInfo.CurrentCulture)))
             {
-                if (r.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    result.Add(r);
-                }
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            return result.ToArray();
+            return this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)].ToArray();
         }
 
         public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
         {
-            var result = new List<FileCabinetRecord>();
-
-            foreach (var r in this.records)
+            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                if (r.DateOfBirth.Equals(dateOfBirth))
-                {
-                    result.Add(r);
-                }
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            return result.ToArray();
+            return this.dateOfBirthDictionary[dateOfBirth].ToArray();
         }
 
         public int GetStat()
