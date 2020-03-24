@@ -6,7 +6,7 @@ namespace FileCabinetApp
 {
     public class FileCabinetService
     {
-        private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
 
         public int CreateRecord(string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
         {
@@ -66,7 +66,7 @@ namespace FileCabinetApp
 
             var newRecord = new FileCabinetRecord
             {
-                Id = this.list.Count + 1,
+                Id = this.records.Count + 1,
                 FirstName = firstName,
                 LastName = lastName,
                 Sex = sex,
@@ -75,23 +75,23 @@ namespace FileCabinetApp
                 Balance = balance,
             };
 
-            this.list.Add(newRecord);
+            this.records.Add(newRecord);
 
             return newRecord.Id;
         }
 
         public void EditRecord(int id, string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
         {
-            for (int i = 0; i < this.list.Count; i++)
+            for (int i = 0; i < this.records.Count; i++)
             {
-                if (this.list[i].Id == id)
+                if (this.records[i].Id == id)
                 {
-                    this.list[i].FirstName = firstName;
-                    this.list[i].LastName = lastName;
-                    this.list[i].Sex = sex;
-                    this.list[i].Weight = weight;
-                    this.list[i].DateOfBirth = dateOfBirth;
-                    this.list[i].Balance = balance;
+                    this.records[i].FirstName = firstName;
+                    this.records[i].LastName = lastName;
+                    this.records[i].Sex = sex;
+                    this.records[i].Weight = weight;
+                    this.records[i].DateOfBirth = dateOfBirth;
+                    this.records[i].Balance = balance;
 
                     return;
                 }
@@ -102,12 +102,39 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] GetRecords()
         {
-            return this.list.ToArray();
+            return this.records.ToArray();
+        }
+
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            if (firstName is null)
+            {
+                throw new ArgumentNullException($"{nameof(firstName)} can't be null.");
+            }
+
+            firstName = firstName.Trim();
+
+            if (firstName.Length == 0)
+            {
+                throw new ArgumentException($"{nameof(firstName)} can't be empty.");
+            }
+
+            var result = new List<FileCabinetRecord>();
+
+            foreach (var r in this.records)
+            {
+                if (r.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result.Add(r);
+                }
+            }
+
+            return result.ToArray();
         }
 
         public int GetStat()
         {
-            return this.list.Count;
+            return this.records.Count;
         }
     }
 }
