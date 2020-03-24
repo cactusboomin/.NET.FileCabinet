@@ -10,6 +10,7 @@ namespace FileCabinetApp
         private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
 
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, char sex, short weight, DateTime dateOfBirth, decimal balance)
         {
@@ -85,7 +86,13 @@ namespace FileCabinetApp
                 this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
             }
 
+            if (!this.lastNameDictionary.ContainsKey(lastName.ToLower(CultureInfo.CurrentCulture)))
+            {
+                this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+            }
+
             this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)].Add(newRecord);
+            this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)].Add(newRecord);
 
             return newRecord.Id;
         }
@@ -97,6 +104,7 @@ namespace FileCabinetApp
                 if (this.records[i].Id == id)
                 {
                     this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
+                    this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
 
                     this.records[i].FirstName = firstName;
                     this.records[i].LastName = lastName;
@@ -110,7 +118,13 @@ namespace FileCabinetApp
                         this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
                     }
 
+                    if (!this.lastNameDictionary.ContainsKey(this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)))
+                    {
+                        this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+                    }
+
                     this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
+                    this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
 
                     return;
                 }
