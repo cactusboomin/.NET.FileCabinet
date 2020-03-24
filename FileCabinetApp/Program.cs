@@ -22,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -32,6 +33,7 @@ namespace FileCabinetApp
             new string[] { "create", "creates a new record", "The 'create' command creates a new record." },
             new string[] { "list", "prints all records", "The 'list' command prints all records." },
             new string[] { "edit", "changes the record", "The 'edit' command changes the record." },
+            new string[] { "find", "finds the records", "The 'find' command finds records." },
         };
 
         public static void Main(string[] args)
@@ -136,8 +138,7 @@ namespace FileCabinetApp
 
                     Console.Write("date: ");
                     string dateString = Console.ReadLine();
-                    string[] date = dateString.Split(',', '.', '/');
-                    DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                    DateTime dateOfBirth = DateConvert(dateString);
 
                     Console.Write("balance: ");
                     decimal balance = decimal.Parse(Console.ReadLine());
@@ -181,13 +182,59 @@ namespace FileCabinetApp
 
                 Console.Write("date: ");
                 string dateString = Console.ReadLine();
-                string[] date = dateString.Split(',', '.', '/');
-                DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+                DateTime dateOfBirth = DateConvert(dateString);
 
                 Console.Write("balance: ");
                 decimal balance = decimal.Parse(Console.ReadLine());
 
                 fileCabinetService.EditRecord(id, firstName, lastName, sex, weight, dateOfBirth, balance);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static void Find(string parameters)
+        {
+            var options = parameters.Split(' ');
+            int firstOption = 0;
+            int secondOption = 1;
+            FileCabinetRecord[] result = Array.Empty<FileCabinetRecord>();
+
+            try
+            {
+                if (options.Length != 2)
+                {
+                    throw new ArgumentOutOfRangeException($"{nameof(options)} can't contain not 2 parameters.");
+                }
+
+                options[secondOption] = options[secondOption].Trim('"', '\'').Trim();
+
+                if (options[firstOption].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = fileCabinetService.FindByFirstName(options[secondOption]);
+                }
+                else if (options[firstOption].Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = fileCabinetService.FindByLastName(options[secondOption]);
+                }
+                else if (options[firstOption].Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = fileCabinetService.FindByDateOfBirth(DateConvert(options[secondOption]));
+                }
+
+                if (result.Length == 0)
+                {
+                    Console.WriteLine($"records with the {options[firstOption]} {options[secondOption]} was not found.");
+                }
+                else
+                {
+                    foreach (var r in result)
+                    {
+                        Console.WriteLine(r);
+                    }
+                }
             }
             catch (ArgumentException ex)
             {
@@ -203,6 +250,14 @@ namespace FileCabinetApp
             {
                 Console.WriteLine(r);
             }
+        }
+
+        private static DateTime DateConvert(string dateString)
+        {
+            string[] date = dateString.Split(',', '.', '/');
+            DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
+
+            return dateOfBirth;
         }
     }
 }
