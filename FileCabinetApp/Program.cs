@@ -33,7 +33,7 @@ namespace FileCabinetApp
             new string[] { "create", "creates a new record", "The 'create' command creates a new record." },
             new string[] { "list", "prints all records", "The 'list' command prints all records." },
             new string[] { "edit", "changes the record", "The 'edit' command changes the record." },
-            new string[] { "find", "finds the records", "The 'find' command finds records."},
+            new string[] { "find", "finds the records", "The 'find' command finds records." },
         };
 
         public static void Main(string[] args)
@@ -214,6 +214,10 @@ namespace FileCabinetApp
                 if (options[firstOption].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
                 {
                     result = fileCabinetService.FindByFirstName(options[secondOption]);
+                }
+                else if (options[firstOption].Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = fileCabinetService.FindByLastName(options[secondOption]);
                 }
 
                 if (result.Length == 0)

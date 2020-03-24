@@ -132,6 +132,34 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
+        public FileCabinetRecord[] FindByLastName(string lastName)
+        {
+            if (lastName is null)
+            {
+                throw new ArgumentNullException($"{nameof(lastName)} can't be null.");
+            }
+
+            lastName = lastName.Trim();
+
+            if (lastName.Length == 0)
+            {
+                throw new ArgumentException($"{nameof(lastName)} can't be empty.");
+            }
+
+            var result = new List<FileCabinetRecord>();
+
+            foreach (var r in this.records)
+            {
+                if (r.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result.Add(r);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+
         public int GetStat()
         {
             return this.records.Count;
