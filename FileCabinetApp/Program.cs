@@ -1,7 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using Fclp;
+using static FileCabinetApp.Literals;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// The main class that contains the IDE.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Alexei Putik";
@@ -10,7 +18,14 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static IFileCabinetService fileCabinetService;
+
+        private class Service
+        {
+            public string Type { get; set; }
+        }
+
+        private static Service serviceType;
 
         private static bool isRunning = true;
 
@@ -36,9 +51,17 @@ namespace FileCabinetApp
             new string[] { "find", "finds the records", "The 'find' command finds records." },
         };
 
+        /// <summary>
+        /// The main method.
+        /// </summary>
+        /// <param name="args">Arguments of the command line.</param>
         public static void Main(string[] args)
         {
+            serviceType = ParseCommandLine(args);
+            CreateService();
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+            Console.WriteLine($"Using {serviceType.Type} validation rules.");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
@@ -124,33 +147,42 @@ namespace FileCabinetApp
             {
                 try
                 {
-                    Console.Write("first name: ");
-                    string firstName = Console.ReadLine();
+                    Console.Write(FirstNameOutput);
+                    string firstName = ReadInput(StringConverter, FirstNameValidator);
 
-                    Console.Write("last name: ");
-                    string lastName = Console.ReadLine();
+                    Console.Write(LastNameOutput);
+                    string lastName = ReadInput(StringConverter, LastNameValidator);
 
-                    Console.Write("sex: ");
-                    char sex = char.Parse(Console.ReadLine());
+                    Console.Write(SexOutput);
+                    char sex = ReadInput(CharConverter, SexValidator);
 
-                    Console.Write("weight: ");
-                    short weight = short.Parse(Console.ReadLine());
+                    Console.Write(WeightOutput);
+                    short weight = ReadInput(ShortConverter, WeightValidator);
 
-                    Console.Write("date: ");
-                    string dateString = Console.ReadLine();
-                    DateTime dateOfBirth = DateConvert(dateString);
+                    Console.Write(DateOfBirthOutput);
+                    DateTime dateOfBirth = ReadInput(DateConverter, DateOfBirthValidator);
 
-                    Console.Write("balance: ");
-                    decimal balance = decimal.Parse(Console.ReadLine());
+                    Console.Write(BalanceOutput);
+                    decimal balance = ReadInput(DecimalConverter, BalanceValidator);
 
-                    Console.WriteLine($"record #{fileCabinetService.CreateRecord(firstName, lastName, sex, weight, dateOfBirth, balance)} is created.");
+                    var newRecord = new FileCabinetRecordWithoutID()
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Sex = sex,
+                        DateOfBirth = dateOfBirth,
+                        Weight = weight,
+                        Balance = balance,
+                    };
+
+                    Console.WriteLine($"record #{fileCabinetService.CreateRecord(newRecord)} is created.");
 
                     nextIteration = false;
                 }
                 catch (ArgumentException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("try it again");
+                    Console.WriteLine(TryAgainOutput);
                 }
             }
             while (nextIteration);
@@ -158,10 +190,10 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            int id;
-
             try
             {
+                int id;
+
                 if (!int.TryParse(parameters, out id))
                 {
                     Console.WriteLine("invalid id");
@@ -187,7 +219,17 @@ namespace FileCabinetApp
                 Console.Write("balance: ");
                 decimal balance = decimal.Parse(Console.ReadLine());
 
-                fileCabinetService.EditRecord(id, firstName, lastName, sex, weight, dateOfBirth, balance);
+                var changedRecord = new FileCabinetRecordWithoutID
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Sex = sex,
+                    Weight = weight,
+                    DateOfBirth = dateOfBirth,
+                    Balance = balance,
+                };
+
+                fileCabinetService.EditRecord(id, changedRecord);
             }
             catch (ArgumentException ex)
             {
@@ -197,36 +239,38 @@ namespace FileCabinetApp
 
         private static void Find(string parameters)
         {
-            var options = parameters.Split(' ');
-            int firstOption = 0;
-            int secondOption = 1;
-            FileCabinetRecord[] result = Array.Empty<FileCabinetRecord>();
+            var options = parameters.Split(SpaceChar);
+
+            ReadOnlyCollection<FileCabinetRecord> result = new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
 
             try
             {
-                if (options.Length != 2)
+                if (options.Length != MinCountOfOptions)
                 {
                     throw new ArgumentOutOfRangeException($"{nameof(options)} can't contain not 2 parameters.");
                 }
 
-                options[secondOption] = options[secondOption].Trim('"', '\'').Trim();
+                string firstOption = options[0];
+                string secondOption = options[1];
 
-                if (options[firstOption].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+                secondOption = secondOption.Trim(QuotationMarkChar, SingleQuoteChar).Trim();
+
+                if (firstOption.Equals(FindFirstNameString, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    result = fileCabinetService.FindByFirstName(options[secondOption]);
+                    result = fileCabinetService.FindByFirstName(secondOption);
                 }
-                else if (options[firstOption].Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
+                else if (firstOption.Equals(FindLastNameString, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    result = fileCabinetService.FindByLastName(options[secondOption]);
+                    result = fileCabinetService.FindByLastName(secondOption);
                 }
-                else if (options[firstOption].Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
+                else if (firstOption.Equals(FindDateOfBirthString, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    result = fileCabinetService.FindByDateOfBirth(DateConvert(options[secondOption]));
+                    result = fileCabinetService.FindByDateOfBirth(DateConvert(secondOption));
                 }
 
-                if (result.Length == 0)
+                if (result.Count == 0)
                 {
-                    Console.WriteLine($"records with the {options[firstOption]} {options[secondOption]} was not found.");
+                    Console.WriteLine($"records with the {firstOption} {secondOption} was not found.");
                 }
                 else
                 {
@@ -254,10 +298,283 @@ namespace FileCabinetApp
 
         private static DateTime DateConvert(string dateString)
         {
-            string[] date = dateString.Split(',', '.', '/');
+            string[] date = dateString.Split(CommaChar, PointChar, SlashChar);
             DateTime dateOfBirth = new DateTime(int.Parse(date[2]), int.Parse(date[1]), int.Parse(date[0]));
 
             return dateOfBirth;
+        }
+
+        private static Service ParseCommandLine(string[] args)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                args[i] = args[i].ToLower(CultureInfo.CurrentCulture);
+            }
+
+            var parser = new FluentCommandLineParser<Service>();
+
+            parser.Setup(arg => arg.Type)
+                .As('v', "validation-rules")
+                .SetDefault("default");
+
+            var result = parser.Parse(args);
+
+            return parser.Object;
+        }
+
+        private static void CreateService()
+        {
+            switch (serviceType.Type)
+            {
+                case "default":
+                    {
+                        fileCabinetService = new FileCabinetService(new DefaultValidator());
+                        break;
+                    }
+
+                case "custom":
+                    {
+                        fileCabinetService = new FileCabinetService(new CustomValidator());
+                        break;
+                    }
+            }
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
+        }
+
+        private static Tuple<bool, string, string> StringConverter(string input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            if (string.IsNullOrEmpty(input))
+            {
+                result = false;
+                message = $"{nameof(input)} can't be null or empty";
+            }
+
+            return new Tuple<bool, string, string>(result, message, input);
+        }
+
+        private static Tuple<bool, string, char> CharConverter(string input)
+        {
+            bool resultBool = true;
+            string message = string.Empty;
+            char resultChar = ' ';
+
+            if (string.IsNullOrEmpty(input))
+            {
+                resultBool = false;
+                message = $"{nameof(input)} can't be null or empty";
+            }
+            else
+            {
+                switch (input.ToLower(CultureInfo.CurrentCulture))
+                {
+                    case "male":
+                    case "m":
+                        {
+                            resultChar = 'm';
+                            break;
+                        }
+
+                    case "female":
+                    case "f":
+                        {
+                            resultChar = 'f';
+                            break;
+                        }
+
+                    default:
+                        {
+                            resultBool = false;
+                            message = $"{nameof(input)} has incorrect type";
+                            break;
+                        }
+                }
+            }
+
+            return new Tuple<bool, string, char>(resultBool, message, resultChar);
+        }
+
+        private static Tuple<bool, string, DateTime> DateConverter(string input)
+        {
+            bool resultBool = true;
+            string message = string.Empty;
+            var resultDate = DateTime.Now;
+
+            if (!DateTime.TryParse(input, out resultDate))
+            {
+                resultBool = false;
+                message = "invalid date";
+            }
+
+            return new Tuple<bool, string, DateTime>(resultBool, message, resultDate);
+        }
+
+        private static Tuple<bool, string, decimal> DecimalConverter(string input)
+        {
+            bool resultBool = true;
+            string message = string.Empty;
+            decimal resultDecimal = 0;
+
+            if (decimal.TryParse(input, out resultDecimal))
+            {
+                resultBool = false;
+                message = $"{nameof(input)} can't be null or empty";
+            }
+
+            return new Tuple<bool, string, decimal>(resultBool, message, resultDecimal);
+        }
+
+        private static Tuple<bool, string, short> ShortConverter(string input)
+        {
+            bool resultBool = true;
+            string message = string.Empty;
+            short resultShort = 0;
+
+            if (!short.TryParse(input, out resultShort))
+            {
+                resultBool = false;
+                message = $"{nameof(input)} can't be null or empty";
+            }
+
+            return new Tuple<bool, string, short>(resultBool, message, resultShort);
+        }
+
+        private static Tuple<bool, string> FirstNameValidator(string input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateFirstName(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
+        }
+
+        private static Tuple<bool, string> LastNameValidator(string input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateLastName(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
+        }
+
+        private static Tuple<bool, string> SexValidator(char input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateSex(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
+        }
+
+        private static Tuple<bool, string> DateOfBirthValidator(DateTime input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateDateOfBirth(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
+        }
+
+        private static Tuple<bool, string> BalanceValidator(decimal input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateBalance(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
+        }
+
+        private static Tuple<bool, string> WeightValidator(short input)
+        {
+            bool result = true;
+            string message = string.Empty;
+
+            try
+            {
+                fileCabinetService.Validator.ValidateWeight(input);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex.Message;
+            }
+
+            return new Tuple<bool, string>(result, message);
         }
     }
 }

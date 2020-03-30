@@ -4,5 +4,414 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Realizes custom validation logic.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Validates a record.
+            </summary>
+            <param name="record">Record to validate.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateFirstName(System.String)">
+            <summary>
+            Validates a first name.
+            </summary>
+            <param name="firstName">First name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateLastName(System.String)">
+            <summary>
+            Validates a last name.
+            </summary>
+            <param name="lastName">Last name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateSex(System.Char)">
+            <summary>
+            Validates sex.
+            </summary>
+            <param name="sex">Sex of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateDateOfBirth(System.DateTime)">
+            <summary>
+            Validates date of birth.
+            </summary>
+            <param name="dateOfBirth">Date of birth of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateBalance(System.Decimal)">
+            <summary>
+            Validates balance.
+            </summary>
+            <param name="balance">Balance of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateWeight(System.Int16)">
+            <summary>
+            Validates weight.
+            </summary>
+            <param name="weight">Weight of the record.</param>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Realizes default validation logic.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Validates a record.
+            </summary>
+            <param name="record">Record to validate.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateFirstName(System.String)">
+            <summary>
+            Validates a first name.
+            </summary>
+            <param name="firstName">First name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateLastName(System.String)">
+            <summary>
+            Validates a last name.
+            </summary>
+            <param name="lastName">Last name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateSex(System.Char)">
+            <summary>
+            Validates sex.
+            </summary>
+            <param name="sex">Sex of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateDateOfBirth(System.DateTime)">
+            <summary>
+            Validates date of birth.
+            </summary>
+            <param name="dateOfBirth">Date of birth of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateBalance(System.Decimal)">
+            <summary>
+            Validates balance.
+            </summary>
+            <param name="balance">Balance of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateWeight(System.Int16)">
+            <summary>
+            Validates weight.
+            </summary>
+            <param name="weight">Weight of the record.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+            Represents a file cabinet record.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            </summary>
+            <param name="record">A record without ID.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets an ID of the record.
+            </summary>
+            <value>
+            An ID of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets a first name of the record.
+            </summary>
+            <value>
+            A first name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets a last name of the record.
+            </summary>
+            <value>
+            A last name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Sex">
+            <summary>
+            Gets or sets a sex of the record.
+            </summary>
+            <value>
+            A sex of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
+            <summary>
+            Gets or sets a weight of the record.
+            </summary>
+            <value>
+            A weight of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets a date of birth of the record.
+            </summary>
+            <value>
+            A date of birth of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Balance">
+            <summary>
+            Gets or sets a balance of the record.
+            </summary>
+            <value>
+            A balance of the record.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+            Represents the record as string.
+            </summary>
+            <returns>The record as string.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordWithoutID">
+            <summary>
+            Represents a file cabinet record without ID.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.FirstName">
+            <summary>
+            Gets or sets a first name of the record.
+            </summary>
+            <value>
+            A first name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.LastName">
+            <summary>
+            Gets or sets a last name of the record.
+            </summary>
+            <value>
+            A last name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.Sex">
+            <summary>
+            Gets or sets a sex of the record.
+            </summary>
+            <value>
+            A sex of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.Weight">
+            <summary>
+            Gets or sets a weight of the record.
+            </summary>
+            <value>
+            A weight of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.DateOfBirth">
+            <summary>
+            Gets or sets a date of birth of the record.
+            </summary>
+            <value>
+            A date of birth of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.Balance">
+            <summary>
+            Gets or sets a balance of the record.
+            </summary>
+            <value>
+            A balance of the record.
+            </value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            Contains a logic for file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetService.Validator">
+            <summary>
+            Gets realization of the validator.
+            </summary>
+            <value>
+            Realization of the validator.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            </summary>
+            <param name="validator">The validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Creates a record.
+            </summary>
+            <param name="record">A record that contains information about the new record.</param>
+            <returns>An ID of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Edits a record.
+            </summary>
+            <param name="id">An ID of the editable record.</param>
+            <param name="changedRecord">Changed record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+            Gets all records.
+            </summary>
+            <returns>An array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Finds a record by first name.
+            </summary>
+            <param name="firstName">First name of records.</param>
+            <returns>An array of records with certain first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Finds a record by last name.
+            </summary>
+            <param name="lastName">Last name of records.</param>
+            <returns>An array of records with certain last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <summary>
+            Finds a record by date of birth.
+            </summary>
+            <param name="dateOfBirth">Date of birth of records.</param>
+            <returns>An array of records with certain date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+            Gets a count of records.
+            </summary>
+            <returns>A count of records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            Realizes an interface of file cabinet service.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.IFileCabinetService.Validator">
+            <summary>
+            Gets realization of the validator.
+            </summary>
+            <value>
+            Realization of the validator.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Creates a record.
+            </summary>
+            <param name="record">A record that contains information about the new record.</param>
+            <returns>An ID of the new record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Edits a record.
+            </summary>
+            <param name="id">An ID of the editable record.</param>
+            <param name="changedRecord">Changed record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Gets all records.
+            </summary>
+            <returns>An array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Finds a record by first name.
+            </summary>
+            <param name="firstName">First name of records.</param>
+            <returns>An array of records with certain first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Finds a record by last name.
+            </summary>
+            <param name="lastName">Last name of records.</param>
+            <returns>An array of records with certain last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <summary>
+            Finds a record by date of birth.
+            </summary>
+            <param name="dateOfBirth">Date of birth of records.</param>
+            <returns>An array of records with certain date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Gets a count of records.
+            </summary>
+            <returns>A count of records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Realizes an interface for validation logic.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordWithoutID)">
+            <summary>
+            Validates a record.
+            </summary>
+            <param name="record">Record to validate.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateFirstName(System.String)">
+            <summary>
+            Validates a first name.
+            </summary>
+            <param name="firstName">First name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateLastName(System.String)">
+            <summary>
+            Validates a last name.
+            </summary>
+            <param name="lastName">Last name of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateSex(System.Char)">
+            <summary>
+            Validates sex.
+            </summary>
+            <param name="sex">Sex of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateDateOfBirth(System.DateTime)">
+            <summary>
+            Validates date of birth.
+            </summary>
+            <param name="dateOfBirth">Date of birth of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateBalance(System.Decimal)">
+            <summary>
+            Validates balance.
+            </summary>
+            <param name="balance">Balance of the record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateWeight(System.Int16)">
+            <summary>
+            Validates weight.
+            </summary>
+            <param name="weight">Weight of the record.</param>
+        </member>
+        <member name="T:FileCabinetApp.Literals">
+            <summary>
+            Class which contains literals.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            The main class that contains the IDE.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+            The main method.
+            </summary>
+            <param name="args">Arguments of the command line.</param>
+        </member>
     </members>
 </doc>

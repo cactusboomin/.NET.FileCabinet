@@ -5,32 +5,10 @@ using System.Text;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Represents a file cabinet record.
+    /// Represents a file cabinet record without ID.
     /// </summary>
-    public class FileCabinetRecord
+    public class FileCabinetRecordWithoutID
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
-        /// </summary>
-        /// <param name="record">A record without ID.</param>
-        public FileCabinetRecord(FileCabinetRecordWithoutID record)
-        {
-            this.FirstName = record.FirstName;
-            this.LastName = record.LastName;
-            this.Sex = record.Sex;
-            this.DateOfBirth = record.DateOfBirth;
-            this.Weight = record.Weight;
-            this.Balance = record.Balance;
-        }
-
-        /// <summary>
-        /// Gets or sets an ID of the record.
-        /// </summary>
-        /// <value>
-        /// An ID of the record.
-        /// </value>
-        public int Id { get; set; }
-
         /// <summary>
         /// Gets or sets a first name of the record.
         /// </summary>
@@ -78,20 +56,5 @@ namespace FileCabinetApp
         /// A balance of the record.
         /// </value>
         public decimal Balance { get; set; }
-
-        /// <summary>
-        /// Represents the record as string.
-        /// </summary>
-        /// <returns>The record as string.</returns>
-        public override string ToString()
-        {
-            return $"#{this.Id}," +
-                $"{this.FirstName}," +
-                $"{this.LastName}," +
-                $"{this.Sex}," +
-                $"{this.Weight} kg," +
-                $"{this.DateOfBirth.ToShortDateString()}," +
-                $"${this.Balance}";
-        }
     }
 }
