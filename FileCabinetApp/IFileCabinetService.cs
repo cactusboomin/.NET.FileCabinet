@@ -19,6 +19,12 @@ namespace FileCabinetApp
         public IRecordValidator Validator { get; }
 
         /// <summary>
+        /// Makes a snapshot of file cabinet records.
+        /// </summary>
+        /// <returns>File cabinet records snapshot.</returns>
+        public FileCabinetRecordSnapshot MakeSnapshot();
+
+        /// <summary>
         /// Creates a record.
         /// </summary>
         /// <param name="record">A record that contains information about the new record.</param>

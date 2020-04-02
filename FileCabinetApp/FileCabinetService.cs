@@ -36,6 +36,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Makes a snapshot of file cabinet records.
+        /// </summary>
+        /// <returns>Snapshot of file cabinet records.</returns>
+        public FileCabinetRecordSnapshot MakeSnapshot()
+        {
+            return new FileCabinetRecordSnapshot(this.records.ToArray());
+        }
+
+        /// <summary>
         /// Creates a record.
         /// </summary>
         /// <param name="record">A record that contains information about the new record.</param>

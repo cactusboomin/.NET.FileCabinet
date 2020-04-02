@@ -171,6 +171,46 @@
             </summary>
             <returns>The record as string.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Realizes a writing in the CSV file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Writes records.
+            </summary>
+            <param name="records">Records to write.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordSnapshot">
+            <summary>
+            Realizes a snapshot of records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordSnapshot"/> class.
+            </summary>
+            <param name="records">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves to the CSV file.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Saves to the XML file.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordWithoutID">
             <summary>
             Represents a file cabinet record without ID.
@@ -224,6 +264,23 @@
             A balance of the record.
             </value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Realizes a writing in the XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Writes records.
+            </summary>
+            <param name="records">Records to write.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Contains a logic for file cabinet.
@@ -242,6 +299,12 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
             </summary>
             <param name="validator">The validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Makes a snapshot of file cabinet records.
+            </summary>
+            <returns>Snapshot of file cabinet records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
             <summary>
@@ -302,6 +365,12 @@
             <value>
             Realization of the validator.
             </value>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Makes a snapshot of file cabinet records.
+            </summary>
+            <returns>File cabinet records snapshot.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
             <summary>

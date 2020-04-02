@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using Fclp;
 using static FileCabinetApp.Literals;
 
@@ -32,23 +33,25 @@ namespace FileCabinetApp
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
-            new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("exit", Exit),
         };
 
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "export", "exports the records", "The 'export' command exports records in file." },
             new string[] { "stat", "prints the statistics", "The 'stat' command prints the statistics." },
             new string[] { "create", "creates a new record", "The 'create' command creates a new record." },
             new string[] { "list", "prints all records", "The 'list' command prints all records." },
             new string[] { "edit", "changes the record", "The 'edit' command changes the record." },
             new string[] { "find", "finds the records", "The 'find' command finds records." },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
         /// <summary>
@@ -139,53 +142,158 @@ namespace FileCabinetApp
             Console.WriteLine($"{recordsCount} record(s).");
         }
 
-        private static void Create(string parameters)
+        private static void Export(string parameters)
         {
-            bool nextIteration = true;
-
-            do
+            try
             {
-                try
+                var options = ValidatePath(parameters);
+
+                while (File.Exists(options[1]))
                 {
-                    Console.Write(FirstNameOutput);
-                    string firstName = ReadInput(StringConverter, FirstNameValidator);
+                    Console.WriteLine($"File {options[1]} already exists. Do you want to rewrite it?(y/n)");
+                    string answer = Console.ReadLine();
 
-                    Console.Write(LastNameOutput);
-                    string lastName = ReadInput(StringConverter, LastNameValidator);
-
-                    Console.Write(SexOutput);
-                    char sex = ReadInput(CharConverter, SexValidator);
-
-                    Console.Write(WeightOutput);
-                    short weight = ReadInput(ShortConverter, WeightValidator);
-
-                    Console.Write(DateOfBirthOutput);
-                    DateTime dateOfBirth = ReadInput(DateConverter, DateOfBirthValidator);
-
-                    Console.Write(BalanceOutput);
-                    decimal balance = ReadInput(DecimalConverter, BalanceValidator);
-
-                    var newRecord = new FileCabinetRecordWithoutID()
+                    if (answer.Equals("n", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        FirstName = firstName,
-                        LastName = lastName,
-                        Sex = sex,
-                        DateOfBirth = dateOfBirth,
-                        Weight = weight,
-                        Balance = balance,
-                    };
-
-                    Console.WriteLine($"record #{fileCabinetService.CreateRecord(newRecord)} is created.");
-
-                    nextIteration = false;
+                        return;
+                    }
+                    else if (!answer.Equals("y", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                catch (ArgumentException ex)
+
+                var snapshot = fileCabinetService.MakeSnapshot();
+                var writer = new StreamWriter(options[1]);
+
+                if (options[0].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine(TryAgainOutput);
+                    snapshot.SaveToCsv(writer);
+                }
+                else
+                {
+                    snapshot.SaveToXml(writer);
                 }
             }
-            while (nextIteration);
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static string GetFolder(string path)
+        {
+            string[] folders = path.Split('\\');
+            string folder = string.Empty;
+
+            for (int i = 0; i < folders.Length - 1; i++)
+            {
+                folder += folders[i] + "\\";
+            }
+
+            return folder;
+        }
+
+        private static string[] ValidatePath(string parameters)
+        {
+            string[] inputs = parameters.Split(' ');
+
+            if (inputs.Length < 2)
+            {
+                throw new ArgumentException("Incorrect command.");
+            }
+
+            inputs[1] = inputs[1].Trim(new char[] { ' ', '\"' });
+
+            if (!inputs[0].Equals("csv", StringComparison.InvariantCultureIgnoreCase)
+                && !inputs[0].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new ArgumentException("Incorrect command.");
+            }
+
+            if (inputs[1].Contains('\\', StringComparison.CurrentCulture))
+            {
+                string folder = GetFolder(inputs[1]);
+
+                if (!Directory.Exists(folder))
+                {
+                    throw new ArgumentException($"Directory {folder} doesn't exist.");
+                }
+            }
+
+            return inputs;
+        }
+
+        private static bool Answer(string answer)
+        {
+            switch (answer.ToLower(CultureInfo.CurrentCulture))
+            {
+                case "yes":
+                case "y":
+                    {
+                        answer = "y";
+                        break;
+                    }
+
+                case "no":
+                case "n":
+                default:
+                    {
+                        answer = "n";
+                        break;
+                    }
+            }
+
+            return answer.Equals("y", StringComparison.InvariantCultureIgnoreCase) ? true : false;
+        }
+
+        private static void Create(string parameters)
+        {
+            try
+            {
+                Console.Write(FirstNameOutput);
+                string firstName = ReadInput(StringConverter, FirstNameValidator);
+
+                Console.Write(LastNameOutput);
+                string lastName = ReadInput(StringConverter, LastNameValidator);
+
+                Console.Write(SexOutput);
+                char sex = ReadInput(CharConverter, SexValidator);
+
+                Console.Write(WeightOutput);
+                short weight = ReadInput(ShortConverter, WeightValidator);
+
+                Console.Write(DateOfBirthOutput);
+                DateTime dateOfBirth = ReadInput(DateConverter, DateOfBirthValidator);
+
+                Console.Write(BalanceOutput);
+                decimal balance = ReadInput(DecimalConverter, BalanceValidator);
+
+                var newRecord = new FileCabinetRecordWithoutID()
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Sex = sex,
+                    DateOfBirth = dateOfBirth,
+                    Weight = weight,
+                    Balance = balance,
+                };
+
+                Console.WriteLine($"record #{fileCabinetService.CreateRecord(newRecord)} is created.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(TryAgainOutput);
+            }
         }
 
         private static void Edit(string parameters)
@@ -201,23 +309,22 @@ namespace FileCabinetApp
                 }
 
                 Console.Write("first name: ");
-                string firstName = Console.ReadLine();
+                string firstName = ReadInput(StringConverter, FirstNameValidator);
 
                 Console.Write("last name: ");
-                string lastName = Console.ReadLine();
+                string lastName = ReadInput(StringConverter, LastNameValidator);
 
                 Console.Write("sex: ");
-                char sex = char.Parse(Console.ReadLine());
+                char sex = ReadInput(CharConverter, SexValidator);
 
                 Console.Write("weight: ");
-                short weight = short.Parse(Console.ReadLine());
+                short weight = ReadInput(ShortConverter, WeightValidator);
 
                 Console.Write("date: ");
-                string dateString = Console.ReadLine();
-                DateTime dateOfBirth = DateConvert(dateString);
+                DateTime dateOfBirth = ReadInput(DateConverter, DateOfBirthValidator);
 
                 Console.Write("balance: ");
-                decimal balance = decimal.Parse(Console.ReadLine());
+                decimal balance = ReadInput(DecimalConverter, BalanceValidator);
 
                 var changedRecord = new FileCabinetRecordWithoutID
                 {
@@ -445,7 +552,7 @@ namespace FileCabinetApp
             string message = string.Empty;
             decimal resultDecimal = 0;
 
-            if (decimal.TryParse(input, out resultDecimal))
+            if (!decimal.TryParse(input, out resultDecimal))
             {
                 resultBool = false;
                 message = $"{nameof(input)} can't be null or empty";
