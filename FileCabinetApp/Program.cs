@@ -232,29 +232,6 @@ namespace FileCabinetApp
             return inputs;
         }
 
-        private static bool Answer(string answer)
-        {
-            switch (answer.ToLower(CultureInfo.CurrentCulture))
-            {
-                case "yes":
-                case "y":
-                    {
-                        answer = "y";
-                        break;
-                    }
-
-                case "no":
-                case "n":
-                default:
-                    {
-                        answer = "n";
-                        break;
-                    }
-            }
-
-            return answer.Equals("y", StringComparison.InvariantCultureIgnoreCase) ? true : false;
-        }
-
         private static void Create(string parameters)
         {
             try
@@ -435,13 +412,13 @@ namespace FileCabinetApp
             {
                 case "default":
                     {
-                        fileCabinetService = new FileCabinetService(new DefaultValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                         break;
                     }
 
                 case "custom":
                     {
-                        fileCabinetService = new FileCabinetService(new CustomValidator());
+                        fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                         break;
                     }
             }
