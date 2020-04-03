@@ -23,10 +23,12 @@ namespace FileCabinetApp
 
         private class Service
         {
+            public string Validation { get; set; }
+
             public string Type { get; set; }
         }
 
-        private static Service serviceType;
+        private static Service service;
 
         private static bool isRunning = true;
 
@@ -60,11 +62,11 @@ namespace FileCabinetApp
         /// <param name="args">Arguments of the command line.</param>
         public static void Main(string[] args)
         {
-            serviceType = ParseCommandLine(args);
+            service = ParseCommandLine(args);
             CreateService();
 
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-            Console.WriteLine($"Using {serviceType.Type} validation rules.");
+            Console.WriteLine($"Using {service.Validation} validation rules.");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
@@ -397,9 +399,13 @@ namespace FileCabinetApp
 
             var parser = new FluentCommandLineParser<Service>();
 
-            parser.Setup(arg => arg.Type)
+            parser.Setup(arg => arg.Validation)
                 .As('v', "validation-rules")
                 .SetDefault("default");
+
+            parser.Setup(arg => arg.Type)
+                .As('s', "storage")
+                .SetDefault("memory");
 
             var result = parser.Parse(args);
 
@@ -408,19 +414,27 @@ namespace FileCabinetApp
 
         private static void CreateService()
         {
-            switch (serviceType.Type)
+            if (service.Type.Equals("memory", StringComparison.InvariantCultureIgnoreCase))
             {
-                case "default":
-                    {
-                        fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-                        break;
-                    }
-
-                case "custom":
-                    {
-                        fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
-                        break;
-                    }
+                if (service.Validation.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                }
+                else
+                {
+                    fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                }
+            }
+            else
+            {
+                if (service.Validation.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    fileCabinetService = new FileCabinetFilesystemService(new CustomValidator());
+                }
+                else
+                {
+                    fileCabinetService = new FileCabinetFilesystemService(new DefaultValidator());
+                }
             }
         }
 

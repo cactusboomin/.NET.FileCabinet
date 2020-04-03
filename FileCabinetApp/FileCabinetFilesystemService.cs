@@ -7,7 +7,12 @@ namespace FileCabinetApp
 {
     public class FileCabinetFilesystemService : IFileCabinetService
     {
-        public IRecordValidator Validator => throw new NotImplementedException();
+        public IRecordValidator Validator { get; }
+
+        public FileCabinetFilesystemService(IRecordValidator validator)
+        {
+            this.Validator = validator;
+        }
 
         public int CreateRecord(FileCabinetRecordWithoutID record)
         {
