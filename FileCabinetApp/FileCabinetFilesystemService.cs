@@ -126,7 +126,42 @@ namespace FileCabinetApp
         /// <returns>An array of records with certain date of birth.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            throw new NotImplementedException();
+            var records = new List<FileCabinetRecord>(this.GetRecords());
+            var result = new List<FileCabinetRecord>();
+
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(0, SeekOrigin.Begin);
+
+                while (reader.PeekChar() > -1)
+                {
+                    this.stream.Seek(
+                        SizeOfShort +
+                        SizeOfInt +
+                        (SizeOfChar * MaxLengthForFirstNameDefault * 2) +
+                        SizeOfChar,
+                        SeekOrigin.Current);
+
+                    int day = reader.ReadInt32();
+                    int month = reader.ReadInt32();
+                    int year = reader.ReadInt32();
+
+                    var foundDate = new DateTime(year, month, day);
+
+                    if (foundDate.Equals(dateOfBirth))
+                    {
+                        this.stream.Seek(-(SizeOfRecord - SizeOfShort - SizeOfDecimal), SeekOrigin.Current);
+
+                        result.Add(this.ReadRecord(reader));
+                    }
+                    else
+                    {
+                        this.stream.Seek(SizeOfShort + SizeOfDecimal, SeekOrigin.Current);
+                    }
+                }
+
+                return new ReadOnlyCollection<FileCabinetRecord>(result);
+            }
         }
 
         /// <summary>
@@ -161,37 +196,12 @@ namespace FileCabinetApp
             {
                 while (reader.PeekChar() > -1)
                 {
-                    reader.ReadInt16();
-
-                    int id = reader.ReadInt32();
-
-                    string firstName = new string(reader.ReadChars(MaxLengthForFirstNameDefault)).Trim('\0');
-                    string lastName = new string(reader.ReadChars(MaxLengthForLastNameDefault)).Trim('\0');
-
-                    char sex = reader.ReadChar();
-
-                    int day = reader.ReadInt32();
-                    int month = reader.ReadInt32();
-                    int year = reader.ReadInt32();
-                    DateTime dateOfBirth = new DateTime(year, month, day);
-
-                    short weight = reader.ReadInt16();
-
-                    decimal balance = reader.ReadDecimal();
-
-                    var newRecord = new FileCabinetRecord()
-                    {
-                        Id = id,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        Sex = sex,
-                        DateOfBirth = dateOfBirth,
-                        Weight = weight,
-                        Balance = balance,
-                    };
+                    var newRecord = this.ReadRecord(reader);
 
                     records.Add(newRecord);
                 }
+
+                this.stream.Seek(0, SeekOrigin.Begin);
             }
 
             return new ReadOnlyCollection<FileCabinetRecord>(records);
@@ -258,6 +268,38 @@ namespace FileCabinetApp
             writer.Write(record.DateOfBirth.Year);
             writer.Write(record.Weight);
             writer.Write(record.Balance);
+        }
+
+        private FileCabinetRecord ReadRecord(BinaryReader reader)
+        {
+            reader.ReadInt16();
+
+            int id = reader.ReadInt32();
+
+            string firstName = new string(reader.ReadChars(MaxLengthForFirstNameDefault)).Trim('\0');
+            string lastName = new string(reader.ReadChars(MaxLengthForLastNameDefault)).Trim('\0');
+
+            char sex = reader.ReadChar();
+
+            int day = reader.ReadInt32();
+            int month = reader.ReadInt32();
+            int year = reader.ReadInt32();
+            DateTime dateOfBirth = new DateTime(year, month, day);
+
+            short weight = reader.ReadInt16();
+
+            decimal balance = reader.ReadDecimal();
+
+            return new FileCabinetRecord()
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                Sex = sex,
+                DateOfBirth = dateOfBirth,
+                Weight = weight,
+                Balance = balance,
+            };
         }
     }
 }
