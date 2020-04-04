@@ -270,6 +270,11 @@
             </summary>
             <param name="record">A record without ID.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            </summary>
+        </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Id">
             <summary>
             Gets or sets an ID of the record.

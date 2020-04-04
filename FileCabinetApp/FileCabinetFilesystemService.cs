@@ -97,6 +97,8 @@ namespace FileCabinetApp
                 writer.Write(record.DateOfBirth.Year);
                 writer.Write(record.Weight);
                 writer.Write(record.Balance);
+
+                writer.Seek(0, SeekOrigin.Begin);
             }
 
             return id;
@@ -148,7 +150,46 @@ namespace FileCabinetApp
         /// <returns>An array of records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new NotImplementedException();
+            var records = new List<FileCabinetRecord>();
+
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                while (reader.PeekChar() > -1)
+                {
+                    reader.ReadInt16();
+
+                    int id = reader.ReadInt32();
+
+                    string firstName = new string(reader.ReadChars(MaxLengthForFirstNameDefault)).Trim('\0');
+                    string lastName = new string(reader.ReadChars(MaxLengthForLastNameDefault)).Trim('\0');
+
+                    char sex = reader.ReadChar();
+
+                    int day = reader.ReadInt32();
+                    int month = reader.ReadInt32();
+                    int year = reader.ReadInt32();
+                    DateTime dateOfBirth = new DateTime(year, month, day);
+
+                    short weight = reader.ReadInt16();
+
+                    decimal balance = reader.ReadDecimal();
+
+                    var newRecord = new FileCabinetRecord()
+                    {
+                        Id = id,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Sex = sex,
+                        DateOfBirth = dateOfBirth,
+                        Weight = weight,
+                        Balance = balance,
+                    };
+
+                    records.Add(newRecord);
+                }
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(records);
         }
 
         /// <summary>

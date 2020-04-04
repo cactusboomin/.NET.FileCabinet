@@ -24,6 +24,13 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
+        /// </summary>
+        public FileCabinetRecord()
+        {
+        }
+
+        /// <summary>
         /// Gets or sets an ID of the record.
         /// </summary>
         /// <value>
