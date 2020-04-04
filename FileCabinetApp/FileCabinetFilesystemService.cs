@@ -208,7 +208,36 @@ namespace FileCabinetApp
         /// <returns>An array of records with certain last name.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            throw new NotImplementedException();
+            var result = new List<FileCabinetRecord>();
+
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(0, SeekOrigin.Begin);
+
+                while (reader.PeekChar() > -1)
+                {
+                    this.stream.Seek(
+                        SizeOfShort +
+                        SizeOfInt +
+                        (MaxLengthForFirstNameDefault * SizeOfChar),
+                        SeekOrigin.Current);
+
+                    var foundName = new string(reader.ReadChars(MaxLengthForLastNameDefault)).Trim('\0');
+
+                    if (foundName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        this.stream.Seek(-(SizeOfShort + SizeOfInt + (2 * MaxLengthForFirstNameDefault * SizeOfChar)), SeekOrigin.Current);
+
+                        result.Add(this.ReadRecord(reader));
+                    }
+                    else
+                    {
+                        this.stream.Seek(SizeOfRecord - (SizeOfShort + SizeOfInt + (2 * MaxLengthForFirstNameDefault * SizeOfChar)), SeekOrigin.Current);
+                    }
+                }
+
+                return new ReadOnlyCollection<FileCabinetRecord>(result);
+            }
         }
 
         /// <summary>
