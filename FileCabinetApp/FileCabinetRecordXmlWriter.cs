@@ -32,7 +32,7 @@ namespace FileCabinetApp
         /// Writes records.
         /// </summary>
         /// <param name="records">Records to write.</param>
-        public void Write(FileCabinetRecord[] records)
+        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
         {
             this.writer.WriteStartElement("records");
 

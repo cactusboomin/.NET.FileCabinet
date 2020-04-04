@@ -71,34 +71,11 @@ namespace FileCabinetApp
             {
                 id = ++this.lastId;
 
-                writer.Seek(SizeOfShort, SeekOrigin.End);
+                this.stream.Seek(SizeOfShort, SeekOrigin.End);
 
-                writer.Write(id);
+                this.WriteRecord(writer, id, record);
 
-                var firstName = new char[60];
-                for (int i = 0; i < record.FirstName.Length && i < MaxLengthForFirstNameDefault; i++)
-                {
-                    firstName[i] = record.FirstName[i];
-                }
-
-                writer.Write(firstName);
-
-                var lastName = new char[60];
-                for (int i = 0; i < record.LastName.Length && i < MaxLengthForLastNameDefault; i++)
-                {
-                    lastName[i] = record.LastName[i];
-                }
-
-                writer.Write(lastName);
-
-                writer.Write(record.Sex);
-                writer.Write(record.DateOfBirth.Day);
-                writer.Write(record.DateOfBirth.Month);
-                writer.Write(record.DateOfBirth.Year);
-                writer.Write(record.Weight);
-                writer.Write(record.Balance);
-
-                writer.Seek(0, SeekOrigin.Begin);
+                this.stream.Seek(0, SeekOrigin.Begin);
             }
 
             return id;
@@ -111,7 +88,35 @@ namespace FileCabinetApp
         /// <param name="changedRecord">Changed record.</param>
         public void EditRecord(int id, FileCabinetRecordWithoutID changedRecord)
         {
-            throw new NotImplementedException();
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(SizeOfShort, SeekOrigin.Begin);
+                int foundId = 0;
+
+                while (reader.PeekChar() > -1)
+                {
+                    foundId = reader.ReadInt32();
+
+                    if (foundId == id)
+                    {
+                        this.stream.Seek(-SizeOfInt, SeekOrigin.Current);
+                        break;
+                    }
+
+                    this.stream.Seek(SizeOfRecord - SizeOfInt, SeekOrigin.Current);
+                }
+
+                if (foundId == 0)
+                {
+                    throw new ArgumentException($"A record with ID {id} was not found.");
+                }
+            }
+
+            using (var writer = new BinaryWriter(this.stream, Encoding.Unicode, true))
+            {
+                this.WriteRecord(writer, id, changedRecord);
+                this.stream.Seek(0, SeekOrigin.Begin);
+            }
         }
 
         /// <summary>
@@ -207,7 +212,7 @@ namespace FileCabinetApp
         /// <returns>Snapshot of file cabinet records.</returns>
         public FileCabinetRecordSnapshot MakeSnapshot()
         {
-            throw new NotImplementedException();
+            return new FileCabinetRecordSnapshot(this.GetRecords());
         }
 
         /// <summary>
@@ -225,6 +230,34 @@ namespace FileCabinetApp
 
                 this.disposed = true;
             }
+        }
+
+        private void WriteRecord(BinaryWriter writer, int id, FileCabinetRecordWithoutID record)
+        {
+            writer.Write(id);
+
+            var firstName = new char[60];
+            for (int i = 0; i < record.FirstName.Length && i < MaxLengthForFirstNameDefault; i++)
+            {
+                firstName[i] = record.FirstName[i];
+            }
+
+            writer.Write(firstName);
+
+            var lastName = new char[60];
+            for (int i = 0; i < record.LastName.Length && i < MaxLengthForLastNameDefault; i++)
+            {
+                lastName[i] = record.LastName[i];
+            }
+
+            writer.Write(lastName);
+
+            writer.Write(record.Sex);
+            writer.Write(record.DateOfBirth.Day);
+            writer.Write(record.DateOfBirth.Month);
+            writer.Write(record.DateOfBirth.Year);
+            writer.Write(record.Weight);
+            writer.Write(record.Balance);
         }
     }
 }

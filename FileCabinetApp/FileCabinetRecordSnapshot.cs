@@ -10,13 +10,13 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecordSnapshot
     {
-        private FileCabinetRecord[] records;
+        private IReadOnlyCollection<FileCabinetRecord> records;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecordSnapshot"/> class.
         /// </summary>
         /// <param name="records">Stream to write.</param>
-        public FileCabinetRecordSnapshot(FileCabinetRecord[] records)
+        public FileCabinetRecordSnapshot(IReadOnlyCollection<FileCabinetRecord> records)
         {
             this.records = records;
         }

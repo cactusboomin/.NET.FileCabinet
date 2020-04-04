@@ -348,7 +348,7 @@
             </summary>
             <param name="writer">Stream to write.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Writes records.
             </summary>
@@ -359,7 +359,7 @@
             Realizes a snapshot of records.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordSnapshot"/> class.
             </summary>
@@ -441,7 +441,7 @@
             </summary>
             <param name="writer">Stream to write.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord[])">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Writes records.
             </summary>

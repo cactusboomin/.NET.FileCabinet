@@ -405,7 +405,7 @@ namespace FileCabinetApp
 
             parser.Setup(arg => arg.Type)
                 .As('s', "storage")
-                .SetDefault("memory");
+                .SetDefault("file");
 
             var result = parser.Parse(args);
 
