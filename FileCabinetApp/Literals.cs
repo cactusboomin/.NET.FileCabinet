@@ -11,6 +11,16 @@ namespace FileCabinetApp
     {
 #pragma warning disable SA1600 // Elements should be documented
 
+        #region filesystem
+
+        public const int SizeOfRecord = 278;
+        public const int SizeOfShort = 2;
+        public const int SizeOfInt = 4;
+        public const int SizeOfChar = 2;
+        public const int SizeOfDecimal = 16;
+
+        #endregion
+
         #region system literals
 
         public const string FirstNameOutput = "first name: ";
