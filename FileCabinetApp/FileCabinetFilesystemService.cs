@@ -126,7 +126,6 @@ namespace FileCabinetApp
         /// <returns>An array of records with certain date of birth.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            var records = new List<FileCabinetRecord>(this.GetRecords());
             var result = new List<FileCabinetRecord>();
 
             using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
@@ -171,7 +170,35 @@ namespace FileCabinetApp
         /// <returns>An array of records with certain first name.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            var result = new List<FileCabinetRecord>();
+
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(0, SeekOrigin.Begin);
+
+                while (reader.PeekChar() > -1)
+                {
+                    this.stream.Seek(
+                        SizeOfShort +
+                        SizeOfInt,
+                        SeekOrigin.Current);
+
+                    var foundName = new string(reader.ReadChars(MaxLengthForFirstNameDefault)).Trim('\0');
+
+                    if (foundName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        this.stream.Seek(-(SizeOfShort + SizeOfInt + (MaxLengthForFirstNameDefault * SizeOfChar)), SeekOrigin.Current);
+
+                        result.Add(this.ReadRecord(reader));
+                    }
+                    else
+                    {
+                        this.stream.Seek(SizeOfRecord - (SizeOfShort + SizeOfInt + (MaxLengthForFirstNameDefault * SizeOfChar)), SeekOrigin.Current);
+                    }
+                }
+
+                return new ReadOnlyCollection<FileCabinetRecord>(result);
+            }
         }
 
         /// <summary>
