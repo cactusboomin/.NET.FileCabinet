@@ -198,7 +198,7 @@ namespace FileCabinetApp
         /// <returns>A count of records.</returns>
         public int GetStat()
         {
-            throw new NotImplementedException();
+            return (int)(this.stream.Length / SizeOfRecord);
         }
 
         /// <summary>
