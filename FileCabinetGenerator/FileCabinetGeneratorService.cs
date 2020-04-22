@@ -13,7 +13,20 @@ namespace FileCabinetGenerator
             return new FileCabinetGeneratorSnapshot(this.records);
         }
 
-        public FileCabinetRecord GenerateRecord(int id)
+        public void GenerateRecords(int startId, int count)
+        {
+            var id = startId;
+
+            for (int i = 0; i < count; i++)
+            {
+                var record = this.GenerateOneRecord(id);
+                id++;
+
+                this.records.Add(record);
+            }
+        }
+
+        private FileCabinetRecord GenerateOneRecord(int id)
         {
             var firstName = this.GenerateName();
             var lastName = this.GenerateName();
@@ -54,9 +67,9 @@ namespace FileCabinetGenerator
         private char GenerateSex()
         {
             Random number = new Random();
-            var sex = number.Next(0, 1);
+            var sex = number.Next();
 
-            if (sex == 0)
+            if (sex % 2 == 0)
             {
                 return 'f';
             }

@@ -13,7 +13,7 @@ namespace FileCabinetGenerator
         private TextWriter writer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvWriter"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetGeneratorCsv"/> class.
         /// </summary>
         /// <param name="writer">Stream to write.</param>
         public FileCabinetGeneratorCsv(StreamWriter writer)

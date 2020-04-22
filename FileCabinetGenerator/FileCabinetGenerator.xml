@@ -4,5 +4,129 @@
         <name>FileCabinetGenerator</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetGenerator.FileCabinetGeneratorCsv">
+            <summary>
+            Realizes a writing in the CSV file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorCsv.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.FileCabinetGeneratorCsv"/> class.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorCsv.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetGenerator.FileCabinetRecord})">
+            <summary>
+            Writes records.
+            </summary>
+            <param name="records">Records to write.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.FileCabinetGeneratorSnapshot">
+            <summary>
+            Realizes a snapshot of records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetGenerator.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.FileCabinetGeneratorSnapshot"/> class.
+            </summary>
+            <param name="records">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Saves to the CSV file.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Saves to the XML file.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.FileCabinetGeneratorXml">
+            <summary>
+            Realizes a writing in the XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorXml.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="!:FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorXml.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetGenerator.FileCabinetRecord})">
+            <summary>
+            Writes records.
+            </summary>
+            <param name="records">Records to write.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.FileCabinetRecord">
+            <summary>
+            Represents a file cabinet record.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets an ID of the record.
+            </summary>
+            <value>
+            An ID of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets a first name of the record.
+            </summary>
+            <value>
+            A first name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets a last name of the record.
+            </summary>
+            <value>
+            A last name of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.Sex">
+            <summary>
+            Gets or sets a sex of the record.
+            </summary>
+            <value>
+            A sex of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.Weight">
+            <summary>
+            Gets or sets a weight of the record.
+            </summary>
+            <value>
+            A weight of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets a date of birth of the record.
+            </summary>
+            <value>
+            A date of birth of the record.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.FileCabinetRecord.Balance">
+            <summary>
+            Gets or sets a balance of the record.
+            </summary>
+            <value>
+            A balance of the record.
+            </value>
+        </member>
+        <member name="M:FileCabinetGenerator.FileCabinetRecord.ToString">
+            <summary>
+            Represents the record as string.
+            </summary>
+            <returns>The record as string.</returns>
+        </member>
     </members>
 </doc>

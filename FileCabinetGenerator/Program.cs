@@ -25,6 +25,12 @@ namespace FileCabinetGenerator
         {
             generator = ParseCommandLine(args);
             ValidateGenerator();
+
+            var writer = new StreamWriter(generator.OutputFile + "." + generator.OutputType);
+
+            GenerateData(writer);
+
+            writer.Close();
         }
 
         private static Generator ParseCommandLine(string[] args)
@@ -61,12 +67,11 @@ namespace FileCabinetGenerator
         {
             try
             {
-                var file = generator.OutputFile + "." + generator.OutputType;
+                service.GenerateRecords(generator.StartId, generator.RecordsAmount);
 
                 var snapshot = service.MakeSnapshot();
-                var writer = new StreamWriter(options[1]);
 
-                if (options[0].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                if (generator.OutputType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                 {
                     snapshot.SaveToCsv(writer);
                 }
