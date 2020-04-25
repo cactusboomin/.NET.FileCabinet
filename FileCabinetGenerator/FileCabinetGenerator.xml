@@ -51,7 +51,7 @@
         </member>
         <member name="M:FileCabinetGenerator.FileCabinetGeneratorXml.#ctor(System.IO.StreamWriter)">
             <summary>
-            Initializes a new instance of the <see cref="!:FileCabinetRecordXmlWriter"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.FileCabinetGeneratorXml"/> class.
             </summary>
             <param name="writer">Stream to write.</param>
         </member>

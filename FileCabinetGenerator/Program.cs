@@ -102,7 +102,7 @@ namespace FileCabinetGenerator
         {
             if (!generator.OutputType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (generator.OutputType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+                if (!generator.OutputType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
                 {
                     generator.OutputType = "csv";
                 }

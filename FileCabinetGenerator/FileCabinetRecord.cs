@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace FileCabinetGenerator
 {
     /// <summary>
     /// Represents a file cabinet record.
     /// </summary>
+    [Serializable]
+    [XmlType(TypeName = "record")]
     public class FileCabinetRecord
     {
         /// <summary>
@@ -15,6 +18,7 @@ namespace FileCabinetGenerator
         /// <value>
         /// An ID of the record.
         /// </value>
+        [XmlAttribute]
         public int Id { get; set; }
 
         /// <summary>
