@@ -41,7 +41,35 @@ namespace FileCabinetApp
         /// <returns>Snapshot of file cabinet records.</returns>
         public FileCabinetRecordSnapshot MakeSnapshot()
         {
-            return new FileCabinetRecordSnapshot(this.records.ToArray());
+            return new FileCabinetRecordSnapshot(this.records);
+        }
+
+        /// <summary>
+        /// Restores records.
+        /// </summary>
+        /// <param name="snapshot">Snapshot to restore.</param>
+        public void Restore(FileCabinetRecordSnapshot snapshot)
+        {
+            var newRecords = snapshot.GetRecords();
+            var start = newRecords[0].Id;
+            var end = newRecords[newRecords.Count - 1].Id;
+            var index = 0;
+            var startInsert = 0;
+
+            while (index < this.records.Count)
+            {
+                if (this.records[index].Id >= start && this.records[index].Id <= end)
+                {
+                    this.records.RemoveAt(index);
+                }
+                else
+                {
+                    index++;
+                    startInsert++;
+                }
+            }
+
+            this.records.InsertRange(startInsert, newRecords);
         }
 
         /// <summary>
@@ -139,9 +167,9 @@ namespace FileCabinetApp
         /// Gets all records.
         /// </summary>
         /// <returns>An array of records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public List<FileCabinetRecord> GetRecords()
         {
-            return new ReadOnlyCollection<FileCabinetRecord>(this.records);
+            return this.records;
         }
 
         /// <summary>
@@ -149,7 +177,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name of records.</param>
         /// <returns>An array of records with certain first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public List<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (firstName is null)
             {
@@ -163,10 +191,10 @@ namespace FileCabinetApp
 
             if (!this.firstNameDictionary.ContainsKey(firstName.ToLower(CultureInfo.CurrentCulture)))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+                return new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)]);
+            return this.firstNameDictionary[firstName.ToLower(CultureInfo.CurrentCulture)];
         }
 
         /// <summary>
@@ -174,7 +202,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Last name of records.</param>
         /// <returns>An array of records with certain last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public List<FileCabinetRecord> FindByLastName(string lastName)
         {
             if (lastName is null)
             {
@@ -188,10 +216,10 @@ namespace FileCabinetApp
 
             if (!this.lastNameDictionary.ContainsKey(lastName.ToLower(CultureInfo.CurrentCulture)))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+                return new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)]);
+            return this.lastNameDictionary[lastName.ToLower(CultureInfo.CurrentCulture)];
         }
 
         /// <summary>
@@ -199,14 +227,14 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Date of birth of records.</param>
         /// <returns>An array of records with certain date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public List<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+                return new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
+            return this.dateOfBirthDictionary[dateOfBirth];
         }
 
         /// <summary>

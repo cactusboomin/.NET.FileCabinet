@@ -27,7 +27,7 @@ namespace FileCabinetApp
         /// <param name="records">Records to write.</param>
         public void Write(IReadOnlyCollection<FileCabinetRecord> records)
         {
-            var title = "ID;First name;Last name;Sex;Date of Birth;Weight;Balance";
+            var title = "Id;FirstName;LastName;Sex;DateOfBirth;Weight;Balance";
 
             this.writer.Write(title);
             this.writer.Write(this.writer.NewLine);

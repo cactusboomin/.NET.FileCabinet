@@ -36,6 +36,7 @@ namespace FileCabinetApp
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
@@ -47,7 +48,8 @@ namespace FileCabinetApp
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "export", "exports the records", "The 'export' command exports records in file." },
+            new string[] { "export", "exports records", "The 'export' command exports records in file." },
+            new string[] { "import", "imports records", "The 'import' command imports records in file." },
             new string[] { "stat", "prints the statistics", "The 'stat' command prints the statistics." },
             new string[] { "create", "creates a new record", "The 'create' command creates a new record." },
             new string[] { "list", "prints all records", "The 'list' command prints all records." },
@@ -179,6 +181,43 @@ namespace FileCabinetApp
                 else
                 {
                     snapshot.SaveToXml(writer);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static void Import(string parameters)
+        {
+            try
+            {
+                var options = ValidatePath(parameters);
+
+                if (File.Exists(options[1]))
+                {
+                    var snapshot = fileCabinetService.MakeSnapshot();
+                    var reader = new StreamReader(options[1]);
+
+                    if (options[0].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        snapshot.LoadFromCsv(reader);
+                    }
+                    else
+                    {
+                    }
+
+                    fileCabinetService.Restore(snapshot);
+                    reader.Close();
+                }
+                else
+                {
+                    throw new ArgumentException($"File with name {options[1]} doesn't exist.");
                 }
             }
             catch (ArgumentException ex)
@@ -327,7 +366,7 @@ namespace FileCabinetApp
         {
             var options = parameters.Split(SpaceChar);
 
-            ReadOnlyCollection<FileCabinetRecord> result = new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
 
             try
             {

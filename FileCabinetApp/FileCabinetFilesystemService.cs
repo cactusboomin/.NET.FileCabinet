@@ -124,7 +124,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">Date of birth of records.</param>
         /// <returns>An array of records with certain date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public List<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             var result = new List<FileCabinetRecord>();
 
@@ -159,7 +159,7 @@ namespace FileCabinetApp
                     }
                 }
 
-                return new ReadOnlyCollection<FileCabinetRecord>(result);
+                return result;
             }
         }
 
@@ -168,7 +168,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name of records.</param>
         /// <returns>An array of records with certain first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public List<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var result = new List<FileCabinetRecord>();
 
@@ -197,7 +197,7 @@ namespace FileCabinetApp
                     }
                 }
 
-                return new ReadOnlyCollection<FileCabinetRecord>(result);
+                return result;
             }
         }
 
@@ -206,7 +206,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Last name of records.</param>
         /// <returns>An array of records with certain last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public List<FileCabinetRecord> FindByLastName(string lastName)
         {
             var result = new List<FileCabinetRecord>();
 
@@ -236,7 +236,7 @@ namespace FileCabinetApp
                     }
                 }
 
-                return new ReadOnlyCollection<FileCabinetRecord>(result);
+                return result;
             }
         }
 
@@ -244,7 +244,7 @@ namespace FileCabinetApp
         /// Gets all records.
         /// </summary>
         /// <returns>An array of records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public List<FileCabinetRecord> GetRecords()
         {
             var records = new List<FileCabinetRecord>();
 
@@ -260,7 +260,7 @@ namespace FileCabinetApp
                 this.stream.Seek(0, SeekOrigin.Begin);
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(records);
+            return records;
         }
 
         /// <summary>
@@ -356,6 +356,11 @@ namespace FileCabinetApp
                 Weight = weight,
                 Balance = balance,
             };
+        }
+
+        public void Restore(FileCabinetRecordSnapshot snapshot)
+        {
+            throw new NotImplementedException();
         }
     }
 }
