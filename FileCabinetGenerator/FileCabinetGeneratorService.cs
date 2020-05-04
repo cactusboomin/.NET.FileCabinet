@@ -19,35 +19,14 @@ namespace FileCabinetGenerator
 
             for (int i = 0; i < count; i++)
             {
-                var record = this.GenerateOneRecord(id);
+                var record = GenerateOneRecord(id);
                 id++;
 
                 this.records.Add(record);
             }
         }
 
-        private FileCabinetRecord GenerateOneRecord(int id)
-        {
-            var firstName = this.GenerateName();
-            var lastName = this.GenerateName();
-            var sex = this.GenerateSex();
-            var weight = this.GenerateWeight();
-            var dateOfBirth = this.GenerateDateOfBirth();
-            var balance = this.GenerateBalance();
-
-            return new FileCabinetRecord()
-            {
-                Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                Sex = sex,
-                Weight = weight,
-                DateOfBirth = dateOfBirth,
-                Balance = balance,
-            };
-        }
-
-        private string GenerateName()
+        private static string GenerateName()
         {
             var chars = "qwertyuiopasdfghjklzxcvbnm";
             Random randomNumber = new Random();
@@ -64,7 +43,7 @@ namespace FileCabinetGenerator
             return builder.ToString();
         }
 
-        private char GenerateSex()
+        private static char GenerateSex()
         {
             Random number = new Random();
             var sex = number.Next();
@@ -79,14 +58,14 @@ namespace FileCabinetGenerator
             }
         }
 
-        private short GenerateWeight()
+        private static short GenerateWeight()
         {
             Random weight = new Random();
 
             return (short)weight.Next(30, 200);
         }
 
-        private DateTime GenerateDateOfBirth()
+        private static DateTime GenerateDateOfBirth()
         {
             Random number = new Random();
 
@@ -106,11 +85,32 @@ namespace FileCabinetGenerator
             return new DateTime(year, month, day);
         }
 
-        private decimal GenerateBalance()
+        private static decimal GenerateBalance()
         {
             Random number = new Random();
 
             return number.Next();
+        }
+
+        private static FileCabinetRecord GenerateOneRecord(int id)
+        {
+            var firstName = GenerateName();
+            var lastName = GenerateName();
+            var sex = GenerateSex();
+            var weight = GenerateWeight();
+            var dateOfBirth = GenerateDateOfBirth();
+            var balance = GenerateBalance();
+
+            return new FileCabinetRecord()
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                Sex = sex,
+                Weight = weight,
+                DateOfBirth = dateOfBirth,
+                Balance = balance,
+            };
         }
     }
 }

@@ -181,6 +181,12 @@
             </summary>
             <returns>Snapshot of file cabinet records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetRecordSnapshot)">
+            <summary>
+            Restores records.
+            </summary>
+            <param name="snapshot">Snapshot to restore.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose(System.Boolean)">
             <summary>
             Disposes a file cabinet system.
@@ -287,7 +293,7 @@
             </summary>
             <value>
             An ID of the record.
-            </value>
+            </value> 
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
             <summary>
@@ -406,6 +412,12 @@
             </summary>
             <param name="writer">Stream to write.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+            Loads record from XML-file.
+            </summary>
+            <param name="reader">Stream to read.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
             Saves to the XML file.
@@ -464,6 +476,23 @@
             <value>
             A balance of the record.
             </value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
+            <summary>
+            Realizes reading from XML-file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="reader">Stream to read.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Reads all records.
+            </summary>
+            <returns>Records.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>

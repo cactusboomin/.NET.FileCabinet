@@ -210,6 +210,7 @@ namespace FileCabinetApp
                     }
                     else
                     {
+                        snapshot.LoadFromXml(reader);
                     }
 
                     fileCabinetService.Restore(snapshot);
@@ -444,7 +445,7 @@ namespace FileCabinetApp
 
             parser.Setup(arg => arg.Type)
                 .As('s', "storage")
-                .SetDefault("file");
+                .SetDefault("memory");
 
             var result = parser.Parse(args);
 

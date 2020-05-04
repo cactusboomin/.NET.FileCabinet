@@ -26,7 +26,7 @@
             Realizes a snapshot of records.
             </summary>
         </member>
-        <member name="M:FileCabinetGenerator.FileCabinetGeneratorSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetGenerator.FileCabinetRecord})">
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorSnapshot.#ctor(System.Collections.Generic.List{FileCabinetGenerator.FileCabinetRecord})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetGenerator.FileCabinetGeneratorSnapshot"/> class.
             </summary>
@@ -55,7 +55,7 @@
             </summary>
             <param name="writer">Stream to write.</param>
         </member>
-        <member name="M:FileCabinetGenerator.FileCabinetGeneratorXml.Write(System.Collections.Generic.IReadOnlyCollection{FileCabinetGenerator.FileCabinetRecord})">
+        <member name="M:FileCabinetGenerator.FileCabinetGeneratorXml.Write(System.Collections.Generic.List{FileCabinetGenerator.FileCabinetRecord})">
             <summary>
             Writes records.
             </summary>

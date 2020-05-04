@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
     /// <summary>
     /// Represents a file cabinet record.
     /// </summary>
+    [Serializable]
+    [XmlRoot("record")]
     public class FileCabinetRecord
     {
         /// <summary>
@@ -35,7 +38,8 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>
         /// An ID of the record.
-        /// </value>
+        /// </value> 
+        [XmlAttribute]
         public int Id { get; set; }
 
         /// <summary>
@@ -92,13 +96,13 @@ namespace FileCabinetApp
         /// <returns>The record as string.</returns>
         public override string ToString()
         {
-            return $"#{this.Id}," +
-                $"{this.FirstName}," +
+            return $"#{this.Id}." +
+                $"{this.FirstName} " +
                 $"{this.LastName}," +
                 $"{this.Sex}," +
                 $"{this.Weight} kg," +
                 $"{this.DateOfBirth.ToShortDateString()}," +
-                $"${this.Balance}";
+                $"${this.Balance}.";
         }
     }
 }

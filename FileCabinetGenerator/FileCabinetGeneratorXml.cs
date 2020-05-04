@@ -26,14 +26,11 @@ namespace FileCabinetGenerator
         /// Writes records.
         /// </summary>
         /// <param name="records">Records to write.</param>
-        public void Write(IReadOnlyCollection<FileCabinetRecord> records)
+        public void Write(List<FileCabinetRecord> records)
         {
-            var serializer = new XmlSerializer(typeof(FileCabinetRecord));
+            var serializer = new XmlSerializer(records.GetType());
 
-            foreach (var r in records)
-            {
-                serializer.Serialize(this.writer, r);
-            }
+            serializer.Serialize(this.writer, records);
         }
     }
 }

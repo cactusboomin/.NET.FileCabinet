@@ -54,6 +54,17 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Loads record from XML-file.
+        /// </summary>
+        /// <param name="reader">Stream to read.</param>
+        public void LoadFromXml(StreamReader reader)
+        {
+            var xmlReader = new FileCabinetRecordXmlReader(reader);
+
+            this.records = xmlReader.ReadAll();
+        }
+
+        /// <summary>
         /// Saves to the XML file.
         /// </summary>
         /// <param name="writer">Stream to write.</param>

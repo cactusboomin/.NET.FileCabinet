@@ -282,6 +282,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Restores records.
+        /// </summary>
+        /// <param name="snapshot">Snapshot to restore.</param>
+        public void Restore(FileCabinetRecordSnapshot snapshot)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Disposes a file cabinet system.
         /// </summary>
         /// <param name="disposing">True if you need to clear managed resources.</param>
@@ -356,11 +365,6 @@ namespace FileCabinetApp
                 Weight = weight,
                 Balance = balance,
             };
-        }
-
-        public void Restore(FileCabinetRecordSnapshot snapshot)
-        {
-            throw new NotImplementedException();
         }
     }
 }

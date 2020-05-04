@@ -9,9 +9,13 @@ namespace FileCabinetGenerator
     /// Represents a file cabinet record.
     /// </summary>
     [Serializable]
-    [XmlType(TypeName = "record")]
+    [XmlRoot("record")]
     public class FileCabinetRecord
     {
+        public FileCabinetRecord()
+        {
+        }
+
         /// <summary>
         /// Gets or sets an ID of the record.
         /// </summary>

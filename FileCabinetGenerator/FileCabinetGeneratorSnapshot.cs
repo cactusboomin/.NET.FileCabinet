@@ -10,13 +10,13 @@ namespace FileCabinetGenerator
     /// </summary>
     public class FileCabinetGeneratorSnapshot
     {
-        private IReadOnlyCollection<FileCabinetRecord> records;
+        private List<FileCabinetRecord> records;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetGeneratorSnapshot"/> class.
         /// </summary>
         /// <param name="records">Stream to write.</param>
-        public FileCabinetGeneratorSnapshot(IReadOnlyCollection<FileCabinetRecord> records)
+        public FileCabinetGeneratorSnapshot(List<FileCabinetRecord> records)
         {
             this.records = records;
         }

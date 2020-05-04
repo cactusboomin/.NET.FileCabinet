@@ -69,7 +69,14 @@ namespace FileCabinetApp
                 }
             }
 
-            this.records.InsertRange(startInsert, newRecords);
+            if (this.records.Count == 0)
+            {
+                this.records.AddRange(newRecords);
+            }
+            else
+            {
+                this.records.InsertRange(startInsert, newRecords);
+            }
         }
 
         /// <summary>

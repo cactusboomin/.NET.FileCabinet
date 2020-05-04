@@ -23,3 +23,6 @@ dotnet_diagnostic.CA1012.severity = none
 
 # CA1031: Не перехватывать исключения общих типов
 dotnet_diagnostic.CA1031.severity = none
+
+# CA5369: Использовать XmlReader для десериализации
+dotnet_diagnostic.CA5369.severity = none
