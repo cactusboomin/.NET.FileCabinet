@@ -35,11 +35,14 @@ namespace FileCabinetApp
         /// Loads from the CSV file.
         /// </summary>
         /// <param name="reader">Stream to read.</param>
-        public void LoadFromCsv(StreamReader reader)
+        /// <returns>Count of records.</returns>
+        public int LoadFromCsv(StreamReader reader)
         {
             var csvReader = new FileCabinetRecordCsvReader(reader);
 
             this.records = csvReader.ReadAll();
+
+            return this.records.Count;
         }
 
         /// <summary>
@@ -57,11 +60,14 @@ namespace FileCabinetApp
         /// Loads record from XML-file.
         /// </summary>
         /// <param name="reader">Stream to read.</param>
-        public void LoadFromXml(StreamReader reader)
+        /// <returns>Count of records.</returns>
+        public int LoadFromXml(StreamReader reader)
         {
             var xmlReader = new FileCabinetRecordXmlReader(reader);
 
             this.records = xmlReader.ReadAll();
+
+            return this.records.Count;
         }
 
         /// <summary>

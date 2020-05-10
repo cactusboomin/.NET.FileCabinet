@@ -203,17 +203,19 @@ namespace FileCabinetApp
                 {
                     var snapshot = fileCabinetService.MakeSnapshot();
                     var reader = new StreamReader(options[1]);
+                    int count;
 
                     if (options[0].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        snapshot.LoadFromCsv(reader);
+                        count = snapshot.LoadFromCsv(reader);
                     }
                     else
                     {
-                        snapshot.LoadFromXml(reader);
+                        count = snapshot.LoadFromXml(reader);
                     }
 
                     fileCabinetService.Restore(snapshot);
+                    Console.WriteLine($"{count} records were imported.");
                     reader.Close();
                 }
                 else
@@ -445,7 +447,7 @@ namespace FileCabinetApp
 
             parser.Setup(arg => arg.Type)
                 .As('s', "storage")
-                .SetDefault("memory");
+                .SetDefault("file");
 
             var result = parser.Parse(args);
 

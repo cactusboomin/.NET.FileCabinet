@@ -405,6 +405,7 @@
             Loads from the CSV file.
             </summary>
             <param name="reader">Stream to read.</param>
+            <returns>Count of records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -417,6 +418,7 @@
             Loads record from XML-file.
             </summary>
             <param name="reader">Stream to read.</param>
+            <returns>Count of records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>

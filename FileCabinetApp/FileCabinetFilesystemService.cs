@@ -73,7 +73,7 @@ namespace FileCabinetApp
 
                 this.stream.Seek(SizeOfShort, SeekOrigin.End);
 
-                this.WriteRecord(writer, id, record);
+                this.WriteRecordWithoutID(writer, id, record);
 
                 this.stream.Seek(0, SeekOrigin.Begin);
             }
@@ -114,7 +114,7 @@ namespace FileCabinetApp
 
             using (var writer = new BinaryWriter(this.stream, Encoding.Unicode, true))
             {
-                this.WriteRecord(writer, id, changedRecord);
+                this.WriteRecordWithoutID(writer, id, changedRecord);
                 this.stream.Seek(0, SeekOrigin.Begin);
             }
         }
@@ -287,7 +287,70 @@ namespace FileCabinetApp
         /// <param name="snapshot">Snapshot to restore.</param>
         public void Restore(FileCabinetRecordSnapshot snapshot)
         {
-            throw new NotImplementedException();
+            var newRecords = snapshot.GetRecords();
+            var start = newRecords[0].Id;
+            var end = newRecords[newRecords.Count - 1].Id;
+            var startInsert = -1;
+            int currentId = 0;
+            int currentPosition = 0;
+            bool readRecords = false;
+
+            using (var reader = new BinaryReader(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(SizeOfShort, SeekOrigin.Begin);
+
+                if (reader.PeekChar() < 0)
+                {
+                    startInsert = 0;
+                }
+
+                while (reader.PeekChar() > -1)
+                {
+                    currentId = reader.ReadInt32();
+                    this.stream.Seek(-SizeOfInt, SeekOrigin.Current);
+
+                    if (currentId > start && startInsert == -1)
+                    {
+                        startInsert = currentPosition;
+                    }
+
+                    if (currentId < start)
+                    {
+                        startInsert = currentPosition + 1;
+                    }
+
+                    if (currentId > end)
+                    {
+                        readRecords = true;
+                        break;
+                    }
+
+                    this.stream.Seek(SizeOfRecord, SeekOrigin.Current);
+                }
+
+                if (readRecords == true)
+                {
+                    this.stream.Seek(-SizeOfShort, SeekOrigin.Current);
+
+                    while (reader.PeekChar() > -1)
+                    {
+                        newRecords.Add(ReadRecord(reader));
+                    }
+                }
+            }
+
+            using (var writer = new BinaryWriter(this.stream, Encoding.Unicode, true))
+            {
+                this.stream.Seek(startInsert * SizeOfRecord, SeekOrigin.Begin);
+
+                foreach (var r in newRecords)
+                {
+                    this.stream.Seek(SizeOfShort, SeekOrigin.Current);
+                    this.WriteRecordWithID(writer, r);
+                }
+
+                this.stream.Seek(0, SeekOrigin.Begin);
+            }
         }
 
         /// <summary>
@@ -307,9 +370,37 @@ namespace FileCabinetApp
             }
         }
 
-        private void WriteRecord(BinaryWriter writer, int id, FileCabinetRecordWithoutID record)
+        private void WriteRecordWithoutID(BinaryWriter writer, int id, FileCabinetRecordWithoutID record)
         {
             writer.Write(id);
+
+            var firstName = new char[60];
+            for (int i = 0; i < record.FirstName.Length && i < MaxLengthForFirstNameDefault; i++)
+            {
+                firstName[i] = record.FirstName[i];
+            }
+
+            writer.Write(firstName);
+
+            var lastName = new char[60];
+            for (int i = 0; i < record.LastName.Length && i < MaxLengthForLastNameDefault; i++)
+            {
+                lastName[i] = record.LastName[i];
+            }
+
+            writer.Write(lastName);
+
+            writer.Write(record.Sex);
+            writer.Write(record.DateOfBirth.Day);
+            writer.Write(record.DateOfBirth.Month);
+            writer.Write(record.DateOfBirth.Year);
+            writer.Write(record.Weight);
+            writer.Write(record.Balance);
+        }
+
+        private void WriteRecordWithID(BinaryWriter writer, FileCabinetRecord record)
+        {
+            writer.Write(record.Id);
 
             var firstName = new char[60];
             for (int i = 0; i < record.FirstName.Length && i < MaxLengthForFirstNameDefault; i++)
