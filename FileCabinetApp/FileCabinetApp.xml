@@ -181,6 +181,12 @@
             </summary>
             <returns>Snapshot of file cabinet records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetRecordSnapshot)">
+            <summary>
+            Restores records.
+            </summary>
+            <param name="snapshot">Snapshot to restore.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose(System.Boolean)">
             <summary>
             Disposes a file cabinet system.
@@ -211,6 +217,12 @@
             Makes a snapshot of file cabinet records.
             </summary>
             <returns>Snapshot of file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetRecordSnapshot)">
+            <summary>
+            Restores records.
+            </summary>
+            <param name="snapshot">Snapshot to restore.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
             <summary>
@@ -281,7 +293,7 @@
             </summary>
             <value>
             An ID of the record.
-            </value>
+            </value> 
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
             <summary>
@@ -337,6 +349,23 @@
             </summary>
             <returns>The record as string.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            Implements reading records from CSV-file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="reader">Stream for reading.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Reads all records.
+            </summary>
+            <returns>Records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
             Realizes a writing in the CSV file.
@@ -359,17 +388,37 @@
             Realizes a snapshot of records.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.#ctor(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.#ctor(System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordSnapshot"/> class.
             </summary>
             <param name="records">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.GetRecords">
+            <summary>
+            Gets records.
+            </summary>
+            <returns>Records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            Loads from the CSV file.
+            </summary>
+            <param name="reader">Stream to read.</param>
+            <returns>Count of records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Saves to the CSV file.
             </summary>
             <param name="writer">Stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+            Loads record from XML-file.
+            </summary>
+            <param name="reader">Stream to read.</param>
+            <returns>Count of records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
@@ -430,6 +479,23 @@
             A balance of the record.
             </value>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
+            <summary>
+            Realizes reading from XML-file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="reader">Stream to read.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Reads all records.
+            </summary>
+            <returns>Records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
             Realizes a writing in the XML file.
@@ -465,6 +531,12 @@
             Makes a snapshot of file cabinet records.
             </summary>
             <returns>File cabinet records snapshot.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetRecordSnapshot)">
+            <summary>
+            Restores records.
+            </summary>
+            <param name="snapshot">Snapshot to restore.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordWithoutID)">
             <summary>

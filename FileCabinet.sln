@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCabinetGenerator", "FileCabinetGenerator\FileCabinetGenerator.csproj", "{3D57CDA9-A864-4285-BE24-616780976E36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,18 @@ Global
 		{A9FE0366-2EB3-4C4F-83D8-83CCD2949303}.Release|x64.Build.0 = Release|Any CPU
 		{A9FE0366-2EB3-4C4F-83D8-83CCD2949303}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9FE0366-2EB3-4C4F-83D8-83CCD2949303}.Release|x86.Build.0 = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|x64.Build.0 = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Debug|x86.Build.0 = Debug|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|x64.ActiveCfg = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|x64.Build.0 = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D57CDA9-A864-4285-BE24-616780976E36}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

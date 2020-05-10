@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace FileCabinetApp
+namespace FileCabinetGenerator
 {
     /// <summary>
     /// Realizes a writing in the CSV file.
     /// </summary>
-    public class FileCabinetRecordCsvWriter
+    public class FileCabinetGeneratorCsv
     {
         private TextWriter writer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvWriter"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetGeneratorCsv"/> class.
         /// </summary>
         /// <param name="writer">Stream to write.</param>
-        public FileCabinetRecordCsvWriter(StreamWriter writer)
+        public FileCabinetGeneratorCsv(StreamWriter writer)
         {
             this.writer = writer;
         }

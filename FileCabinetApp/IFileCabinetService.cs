@@ -25,6 +25,12 @@ namespace FileCabinetApp
         public FileCabinetRecordSnapshot MakeSnapshot();
 
         /// <summary>
+        /// Restores records.
+        /// </summary>
+        /// <param name="snapshot">Snapshot to restore.</param>
+        public void Restore(FileCabinetRecordSnapshot snapshot);
+
+        /// <summary>
         /// Creates a record.
         /// </summary>
         /// <param name="record">A record that contains information about the new record.</param>
@@ -42,28 +48,28 @@ namespace FileCabinetApp
         /// Gets all records.
         /// </summary>
         /// <returns>An array of records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords();
+        public List<FileCabinetRecord> GetRecords();
 
         /// <summary>
         /// Finds a record by first name.
         /// </summary>
         /// <param name="firstName">First name of records.</param>
         /// <returns>An array of records with certain first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public List<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Finds a record by last name.
         /// </summary>
         /// <param name="lastName">Last name of records.</param>
         /// <returns>An array of records with certain last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        public List<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Finds a record by date of birth.
         /// </summary>
         /// <param name="dateOfBirth">Date of birth of records.</param>
         /// <returns>An array of records with certain date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+        public List<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
 
         /// <summary>
         /// Gets a count of records.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace FileCabinetApp
+namespace FileCabinetGenerator
 {
     /// <summary>
     /// Represents a file cabinet record.
@@ -12,23 +12,6 @@ namespace FileCabinetApp
     [XmlRoot("record")]
     public class FileCabinetRecord
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
-        /// </summary>
-        /// <param name="record">A record without ID.</param>
-        public FileCabinetRecord(FileCabinetRecordWithoutID record)
-        {
-            this.FirstName = record.FirstName;
-            this.LastName = record.LastName;
-            this.Sex = record.Sex;
-            this.DateOfBirth = record.DateOfBirth;
-            this.Weight = record.Weight;
-            this.Balance = record.Balance;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
-        /// </summary>
         public FileCabinetRecord()
         {
         }
@@ -38,7 +21,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>
         /// An ID of the record.
-        /// </value> 
+        /// </value>
         [XmlAttribute]
         public int Id { get; set; }
 
@@ -96,13 +79,13 @@ namespace FileCabinetApp
         /// <returns>The record as string.</returns>
         public override string ToString()
         {
-            return $"#{this.Id}." +
-                $"{this.FirstName} " +
+            return $"#{this.Id}," +
+                $"{this.FirstName}," +
                 $"{this.LastName}," +
                 $"{this.Sex}," +
                 $"{this.Weight} kg," +
                 $"{this.DateOfBirth.ToShortDateString()}," +
-                $"${this.Balance}.";
+                $"${this.Balance}";
         }
     }
 }
