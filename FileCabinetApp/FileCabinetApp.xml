@@ -431,6 +431,17 @@
             Represents a file cabinet record without ID.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordWithoutID.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordWithoutID"/> class.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordWithoutID.#ctor(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordWithoutID"/> class.
+            </summary>
+            <param name="record">The record with ID.</param>
+        </member>
         <member name="P:FileCabinetApp.FileCabinetRecordWithoutID.FirstName">
             <summary>
             Gets or sets a first name of the record.

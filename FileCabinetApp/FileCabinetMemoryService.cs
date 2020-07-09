@@ -51,32 +51,137 @@ namespace FileCabinetApp
         public void Restore(FileCabinetRecordSnapshot snapshot)
         {
             var newRecords = snapshot.GetRecords();
-            var start = newRecords[0].Id;
-            var end = newRecords[newRecords.Count - 1].Id;
-            var index = 0;
-            var startInsert = 0;
 
-            while (index < this.records.Count)
+            for (int i = 0; i < newRecords.Count; i++)
             {
-                if (this.records[index].Id >= start && this.records[index].Id <= end)
+                if (!this.ValidateRecord(newRecords[i]))
                 {
-                    this.records.RemoveAt(index);
-                }
-                else
-                {
-                    index++;
-                    startInsert++;
+                    newRecords.RemoveAt(i);
+                    i--;
                 }
             }
 
-            if (this.records.Count == 0)
+            var size = this.records.Count;
+            var start = newRecords[0].Id;
+            var end = newRecords[newRecords.Count - 1].Id;
+            var startInsert = -1;
+            var endInsert = -1;
+            var endDelete = false;
+            var currentId = -1;
+
+            for (int currentPosition = 0; currentPosition < size; currentPosition++)
             {
-                this.records.AddRange(newRecords);
+                currentId = this.records[currentPosition].Id;
+
+                if (currentId > start && startInsert == -1)
+                {
+                    startInsert = currentPosition;
+                }
+
+                if (currentId > end && endInsert == -1)
+                {
+                    endInsert = currentPosition;
+                    endDelete = false;
+                }
+
+                if (currentId == end)
+                {
+                    endInsert = currentPosition;
+                    endDelete = true;
+                }
+
+                if (currentId == start)
+                {
+                    startInsert = currentPosition;
+                }
+
+                if (currentId < end)
+                {
+                    endInsert = currentPosition + 1;
+                    endDelete = false;
+                }
+
+                if (currentId < start)
+                {
+                    startInsert = currentPosition + 1;
+                }
+            }
+
+            var deleting = -1;
+
+            if (startInsert == endInsert)
+            {
+                if (endDelete == true)
+                {
+                    deleting = 1;
+                }
+
+                if (endDelete == false)
+                {
+                    deleting = 0;
+                }
             }
             else
             {
+                if (endDelete == true)
+                {
+                    deleting = endInsert - startInsert + 1;
+                }
+
+                if (endDelete == false)
+                {
+                    deleting = endInsert - startInsert;
+                }
+            }
+
+            for (int i = startInsert; i < startInsert + deleting; i++)
+            {
+                this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
+                this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Remove(this.records[i]);
+                this.dateOfBirthDictionary[this.records[i].DateOfBirth].Remove(this.records[i]);
+            }
+
+            if (this.records.Count != 0)
+            {
+                this.records.RemoveRange(startInsert, deleting);
+            }
+
+            if (startInsert < this.records.Count && startInsert != -1)
+            {
                 this.records.InsertRange(startInsert, newRecords);
             }
+            else
+            {
+                this.records.AddRange(newRecords);
+            }
+
+            if (startInsert == -1)
+            {
+                startInsert = 0;
+            }
+
+            for (int i = startInsert; i < startInsert + newRecords.Count; i++)
+            {
+                if (!this.firstNameDictionary.ContainsKey(this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)))
+                {
+                    this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+                }
+
+                if (!this.lastNameDictionary.ContainsKey(this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)))
+                {
+                    this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)] = new List<FileCabinetRecord>();
+                }
+
+                if (!this.dateOfBirthDictionary.ContainsKey(this.records[i].DateOfBirth))
+                {
+                    this.dateOfBirthDictionary[this.records[i].DateOfBirth] = new List<FileCabinetRecord>();
+                }
+
+                this.firstNameDictionary[this.records[i].FirstName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
+                this.lastNameDictionary[this.records[i].LastName.ToLower(CultureInfo.CurrentCulture)].Add(this.records[i]);
+                this.dateOfBirthDictionary[this.records[i].DateOfBirth].Add(this.records[i]);
+            }
+
         }
 
         /// <summary>
@@ -251,6 +356,23 @@ namespace FileCabinetApp
         public int GetStat()
         {
             return this.records.Count;
+        }
+
+        private bool ValidateRecord(FileCabinetRecord record)
+        {
+            bool result = true;
+
+            try
+            {
+                this.Validator.ValidateParameters(new FileCabinetRecordWithoutID(record));
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                result = false;
+            }
+
+            return result;
         }
     }
 }

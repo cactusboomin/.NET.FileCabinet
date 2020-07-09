@@ -10,6 +10,27 @@ namespace FileCabinetApp
     public class FileCabinetRecordWithoutID
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordWithoutID"/> class.
+        /// </summary>
+        public FileCabinetRecordWithoutID()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordWithoutID"/> class.
+        /// </summary>
+        /// <param name="record">The record with ID.</param>
+        public FileCabinetRecordWithoutID(FileCabinetRecord record)
+        {
+            this.FirstName = record.FirstName;
+            this.LastName = record.LastName;
+            this.Sex = record.Sex;
+            this.Weight = record.Weight;
+            this.DateOfBirth = record.DateOfBirth;
+            this.Balance = record.Balance;
+        }
+
+        /// <summary>
         /// Gets or sets a first name of the record.
         /// </summary>
         /// <value>

@@ -334,7 +334,7 @@ namespace FileCabinetApp
 
                     while (reader.PeekChar() > -1)
                     {
-                        newRecords.Add(ReadRecord(reader));
+                        newRecords.Add(this.ReadRecord(reader));
                     }
                 }
             }
